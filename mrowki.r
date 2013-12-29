@@ -27,7 +27,12 @@ mrowki.model_init<-function(UG){
   return(model)
 }
 
-
+op_select<-function(XS,M, UG)
+{
+  if ((length(XS) - 1) %% mrowki.iloscMrowek != 0 )
+    return(list())
+  return(pop(mrowki.iloscMrowek))
+}
 
 mrowki.model_update<-function(XS,M)
 {
