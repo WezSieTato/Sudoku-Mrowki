@@ -87,6 +87,11 @@ mrowki.sudoku.op_generate <- function(XS,M,UG) {
 }
 
 
+mrowki.sudoku.stop_criterion<-function(XS, M)
+{
+  return sudoku.is_complete(XS[[length(XS)]])
+}
+
 mrowki.sudoku.feromony_init<-function(startoweFeromony){
   feromony <- c()
   for (k in 1:729){
@@ -117,3 +122,23 @@ mrowki.sudoku.zaznacz_odwiedzone()<-function(XS, stanZero){
   
   return(sciezki)
 }
+
+mrowki.sudoku <-function(task){
+  sudoku.task <<- task
+  mrowki.zaznacz_odwiedzone <<- mrowki.sudoku.zaznacz_odwiedzone
+  mrowki.feromony_init <<- mrowki.sudoku.feromony_init
+  mrowki.op_generate <<- mrowki.sudoku.op_generate
+  mrowki.stop_criterion <<- mrowki.sudoku.stop_criterion
+  
+  mrowki.op_init<<-function(UG)
+  {
+    return sudoku.task
+  }
+  
+  return mrofki.search()
+}
+
+print('Rozwiazujemy sudoku')
+mrowki.sudoku.init_state()
+print('Rozwiazane sudoku')
+mrowki.sudoku(mrowki.sudoku.init_state())
