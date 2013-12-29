@@ -93,14 +93,13 @@ mrowki.sudoku.feromony_init<-function(startoweFeromony){
     feromony[[k]] <- startoweFeromony
   }
   dim(sciezki[[j]]) <- c(9,9,9)
+  return(feromony)
 }
 
 mrowki.sudoku.zaznacz_odwiedzone()<-function(XS, stanZero){
-  for (i in 1: length(XS)){
-    XS[[i]] <- XS[[i]] - stanZero
-  }
   sciezki <- list()
   for (j in 1: length(XS)){
+    XS[[j]] <- XS[[j]] - stanZero
     sciezki[[j]] <- c()
     for (k in 1:729){
       sciezki[[j]][[k]] <- 0
@@ -116,5 +115,5 @@ mrowki.sudoku.zaznacz_odwiedzone()<-function(XS, stanZero){
     }
   }
   
-  return(XS)
+  return(sciezki)
 }
