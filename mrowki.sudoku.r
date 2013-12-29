@@ -1,9 +1,8 @@
 source('mrowki.r')
 source('sudoku.r')
 
-mrowki.sudoku.model_init <- function(UG) {
-  
-}
+#model init jest w mrowkach, model init czesciowo korzysta z funkcji
+# ktore sa w mrowki.sudoku, ale sama funkcja jest w mrowkach
 
 mrowki.sudoku.init_state <- function() {
   s = c()
@@ -85,4 +84,37 @@ mrowki.sudoku.op_generate <- function(XS,M,UG) {
   YS <- mrowki.sudoku.init_state()
   
   return(YS)
+}
+
+
+mrowki.sudoku.feromony_init<-function(startoweFeromony){
+  feromony <- c()
+  for (k in 1:729){
+    feromony[[k]] <- startoweFeromony
+  }
+  dim(sciezki[[j]]) <- c(9,9,9)
+}
+
+mrowki.sudoku.zaznacz_odwiedzone()<-function(XS, stanZero){
+  for (i in 1: length(XS)){
+    XS[[i]] <- XS[[i]] - stanZero
+  }
+  sciezki <- list()
+  for (j in 1: length(XS)){
+    sciezki[[j]] <- c()
+    for (k in 1:729){
+      sciezki[[j]][[k]] <- 0
+    }
+    dim(sciezki[[j]]) <- c(9,9,9)
+    
+    for (wiersz in 1:9){
+      for (kolumna in 1:9){
+        if(XS[[j]][wiersz, kolumna] != 0){
+          sciezki[[j]][wiersz, kolumna, XS[[j]][wiersz, kolumna]] <- 1
+        }
+      }
+    }
+  }
+  
+  return(XS)
 }

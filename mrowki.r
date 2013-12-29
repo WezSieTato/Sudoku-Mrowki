@@ -14,12 +14,12 @@ mrowki.zaznacz_odwiedzone()<-function(XS, stanZero){
 
 ## funkcja zalezna od problemu
 # inicjuje tablice z feromonami
-mrowki.feromony_init<function(){
+mrowki.feromony_init<-function(startoweFeromony){
   stop('Brak implementacji funkcji inicjujacej feromony')
 }
 
 mrowki.model_init<-function(UG){
-  model <- list(feromony = mrowki.feromony_init,trwalosc_feromonu = 0.81)
+  model <- list(feromony = mrowki.feromony_init(mrowki.startoweFeromony),trwalosc_feromonu = 0.81)
   for (i in 1: length(model$feromony)){
     model%feromony[[i]] <- mrowki.startoweFeromony
   }
