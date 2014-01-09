@@ -24,10 +24,10 @@ mrowki.sudoku.init_state <- function() {
   return(s)
 }
 
-mrowki.sudoku.set_numb_seq <- sudoku.set_numb_seq
-mrowki.sudoku.check_raw <- sudoku.check_raw
-mrowki.sudoku.check_column <- sudoku.check_column
-mrowki.sudoku.check_square <- sudoku.check_square
+mrowki.sudoku.set_numb_seq <<- sudoku.set_numb_seq
+mrowki.sudoku.check_raw <<- sudoku.check_raw
+mrowki.sudoku.check_column <<- sudoku.check_column
+mrowki.sudoku.check_square <<- sudoku.check_square
 
 mrowki.sudoku.extend_state <- function(s) {
   seq = array(data=list(), dim = c(9,9))
@@ -241,9 +241,8 @@ mrowki.sudoku.op_generate <- function(XS,M,UG, WA=4) {
 
 
 
-mrowki.sudoku.stop_criterion<-function(XS, M)
-{
-  return sudoku.is_complete(XS[[length(XS)]])
+mrowki.sudoku.stop_criterion<-function(XS, M){
+  return(sudoku.is_complete(XS[[length(XS)]]))
 }
 
 mrowki.sudoku.feromony_init<-function(startoweFeromony){

@@ -8,7 +8,7 @@ mrowki.startoweFeromony <- 0.5
 # na podstawie stanow odwiedzonych przez mrowki
 # zaznacza w tablicy rownej wymiarom tej do feromonow
 # przebyte wierzcholki
-mrowki.zaznacz_odwiedzone()<-function(XS, stanZero){
+mrowki.zaznacz_odwiedzone<-function(XS, stanZero){
   stop('Brak implementacji funkcji zaznaczajacej odwiedzone wierzcholki')
 }
 
@@ -36,10 +36,6 @@ mrowki.stop_criterion<-function(XS, M)
 
 mrowki.model_init<-function(UG){
   model <- list(feromony = mrowki.feromony_init(mrowki.startoweFeromony),trwalosc_feromonu = 0.81)
-  for (i in 1: length(model$feromony)){
-    model%feromony[[i]] <- mrowki.startoweFeromony
-  }
-  
   return(model)
 }
 
