@@ -1,7 +1,7 @@
 
 source('mht.r')
 
-mrowki.iloscMrowek <- 3
+mrowki.iloscMrowek <- 1
 mrowki.startoweFeromony <- 0.5
 
 ## funkcja zalezna od problemu
@@ -57,7 +57,7 @@ mrowki.model_update<-function(XS,M)
   wielkosc_tablicy <- length(przebyte[[1]])
   for (i in 1: length(przebyte)){
     tablica <- table(przebyte[[i]])
-    dlugosc_drogi <- tablica[names(tablica) == 1][[1]]
+    dlugosc_drogi <- wielkosc_tablicy - tablica[names(tablica) == 0][[1]]
     procent <- wielkosc_tablicy / dlugosc_drogi
     przebyte[[i]] <- replace (przebyte[[i]], przebyte[[i]] == 1, procent)
     M$feromony <- M$feromony + przebyte[[i]]
