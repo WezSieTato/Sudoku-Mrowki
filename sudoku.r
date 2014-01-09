@@ -40,12 +40,15 @@ sudoku.check_column(prob_seq,i,s) {
   return(prob_seq)
 }
 
-#mrowki.sudoku.check_square(prob_seq,i,j,s) {
-#nalezy ustalic w ktorym kwadracie znajduje sie dana liczba
-#  if(k<4) {
-# k nalezy do przedzialu {0..3}
-#  } else {
-
-#  }
-
-#}
+sudoku.check_square <- function(prob_seq,i,j,s) {
+  m_seq <- mrowki.sudoku.set_square_iter_seq(i)
+  n_seq <- mrowki.sudoku.set_square_iter_seq(j)
+  for(m in m_seq) {
+    for(n in n_seq) {
+      if(s[n,m] != 0) {
+        prob_seq <- prob_seq[prob_seq!=s[n,m]]
+      }
+    }
+  }
+  return(prob_seq)
+}
