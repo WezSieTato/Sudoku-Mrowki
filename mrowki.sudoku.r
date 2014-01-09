@@ -295,3 +295,6 @@ print('Rozwiazujemy sudoku')
 mrowki.sudoku.init_state()
 print('Rozwiazane sudoku')
 mrowki.sudoku(mrowki.sudoku.init_state())
+
+mrowki.sudoku.op_generate(s,c(),c())
+mrowki.sudoku.extend_state(mrowki.sudoku.init_state())
