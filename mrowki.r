@@ -58,7 +58,7 @@ mrowki.model_update<-function(XS,M)
   for (i in 1: length(przebyte)){
     tablica <- table(przebyte[[i]])
     dlugosc_drogi <- wielkosc_tablicy - tablica[names(tablica) == 0][[1]]
-    procent <- wielkosc_tablicy / dlugosc_drogi
+    procent <-  dlugosc_drogi / wielkosc_tablicy
     przebyte[[i]] <- replace (przebyte[[i]], przebyte[[i]] == 1, procent)
     M$feromony <- M$feromony + przebyte[[i]]
   }
