@@ -85,15 +85,17 @@ mrowki.sudoku.there_is_move <- function(pn) {
   return (FALSE)
 }
 
-# TODO: w tym rozwiazaniu nie uwzgledniam wskaznika feromonow
-mrowki.sudoku.set_propability_matrix <- function(attr, pn, pheromons = c()) { 
-  pher = array(data=0, dim=c(9,9,9)) # stub chwilowy
+# 
+mrowki.sudoku.set_propability_matrix <- function(attr, pn, pheromons) { 
+  # pher = array(data=0, dim=c(9,9,9)) # stub chwilowy
   prop_array = array(data=0, dim=c(9,9,9))
+  
+  pheromons <- pheromons/max(pheromons) # normalizacja
   
   for(i in 1:9) {
     for(j in 1:9) {
       for(k in pn[i,j][[1]]) {
-        prop_array[i,j,k] = pher[i,j,k] + attr[i,j]
+        prop_array[i,j,k] = pheromons[i,j,k] + attr[i,j]
       }
     }
   }
@@ -223,7 +225,7 @@ mrowki.sudoku.op_generate <- function(XS,M,UG, WA=4) {
   
   while(mrowki.sudoku.there_is_move(PN)) {
     # zakladam, ze M to macierz 9x9x9 
-    P <- mrowki.sudoku.set_propability_matrix(AS,PN) # zalozony stub, powinno byc jeszcze M w liscie argumentow
+    P <- mrowki.sudoku.set_propability_matrix(AS,PN,M$feromony) # zalozony stub, powinno byc jeszcze M w liscie argumentow
     N <- mrowki.sudoku.rand_move(P)
     
     n_column <- mrowki.sudoku.get_rand_column(N)
