@@ -22,7 +22,7 @@ sudoku.set_numb_seq <- function(i,j,s) {
 #i - rzad polozenia pola
 #j - kolumna polozenia pola
 #s - macierz stanu zawierajaca pola
-mrowki.sudoku.check_raw <- function(prob_seq,j,s) {
+sudoku.check_raw <- function(prob_seq,j,s) {
   for(k in 1:9) {
     if(s[j,k] != 0) {
       prob_seq <- prob_seq[prob_seq!=s[j,k]]
@@ -32,7 +32,7 @@ mrowki.sudoku.check_raw <- function(prob_seq,j,s) {
   return(prob_seq)
 }
 
-mrowki.sudoku.check_column <- function(prob_seq,i,s) {
+sudoku.check_column <- function(prob_seq,i,s) {
   for(k in 1:9) {
     if(s[k,i] != 0) {
       prob_seq <- prob_seq[prob_seq!=s[k,i]]
@@ -42,7 +42,7 @@ mrowki.sudoku.check_column <- function(prob_seq,i,s) {
   return(prob_seq)
 }
 
-mrowki.sudoku.check_square <- function(prob_seq,i,j,s) {
+sudoku.check_square <- function(prob_seq,i,j,s) {
   m_seq <- mrowki.sudoku.set_square_iter_seq(i)
   n_seq <- mrowki.sudoku.set_square_iter_seq(j)
   for(m in m_seq) {
