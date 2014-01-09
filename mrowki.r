@@ -39,7 +39,7 @@ mrowki.model_init<-function(UG){
   return(model)
 }
 
-op_select<-function(XS,M, UG)
+mrowki.op_select<-function(XS,M, UG)
 {
   if ((length(XS) - 1) %% mrowki.iloscMrowek != 0 )
     return(list())
@@ -67,8 +67,8 @@ mrowki.model_update<-function(XS,M)
   return(M)
 }
 
-mrofki.search<-function(){
-  search(mrofki.model_init, mrofki.model_update, mrofki.op_init, mrofki.op_select, mrofki.op_generate, mrofki.stop_criterion, UG)
+mrowki.search<-function(){
+  search(mrowki.model_init, mrowki.model_update, mrowki.op_init, mrowki.op_select, mrowki.op_generate, mrowki.stop_criterion, UG)
   
   return(pop(1)[[1]])
 }

@@ -250,7 +250,7 @@ mrowki.sudoku.feromony_init<-function(startoweFeromony){
   for (k in 1:729){
     feromony[[k]] <- startoweFeromony
   }
-  dim(sciezki[[j]]) <- c(9,9,9)
+  dim(feromony) <- c(9,9,9)
   return(feromony)
 }
 
@@ -258,7 +258,7 @@ mrowki.sudoku.zaznacz_odwiedzone<-function(XS, stanZero){
   sciezki <- list()
   for (j in 1: length(XS)){
     XS[[j]] <- XS[[j]] - stanZero
-    sciezki[[j]] <- c()
+    sciezki[[j]] <- c(1)
     for (k in 1:729){
       sciezki[[j]][[k]] <- 0
     }
@@ -288,7 +288,7 @@ mrowki.sudoku <-function(task){
     return (sudoku.task)
   }
   
-  return (mrofki.search())
+  return (mrowki.search())
 }
 
 print('Rozwiazujemy sudoku')
