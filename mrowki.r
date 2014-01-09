@@ -64,6 +64,7 @@ mrowki.model_update<-function(XS,M)
   }
   
   M$feromony <- M$feromony * M$trwalosc_feromonu
+  M$feromony <- replace(M$feromony, M$feromony < 0.1, 0.1)
   return(M)
 }
 
