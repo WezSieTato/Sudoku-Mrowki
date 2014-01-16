@@ -241,7 +241,10 @@ mrowki.sudoku.op_generate <- function(XS,M,UG, WA=4) {
 
 
 mrowki.sudoku.stop_criterion<-function(XS, M){
-  return(sudoku.is_complete(XS[[length(XS)]]))
+  path <- XS[[length(XS)]]
+  lastId <- path[[length(path)]]
+  vertex <- mrowki.vertices[[lastId]]
+  return(sudoku.is_complete(vertex$board))
 }
 
 
