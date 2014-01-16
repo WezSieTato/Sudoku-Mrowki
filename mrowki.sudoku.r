@@ -39,7 +39,8 @@ mrowki.sudoku.update_state <- function(YS,n_column,n_raw,n_value) {
 mrowki.sudoku.get_sons <- function(ID) {
   if(M$vertices[[ID]] != NULL) {
       return(mrowki.vertices[[ID]]$sons)
-    
+  }
+  
   # if M$vertices[[ID]] == NULL
   return(mrowki.sudoku.build_sons(ID))
     
