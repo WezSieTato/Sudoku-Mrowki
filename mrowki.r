@@ -4,6 +4,8 @@ mrowki.antNumber <- 1
 mrowki.pheromonDegradation <- 0.81
 mrowki.startPheromon <- 0.5
 mrowki.task <- NULL
+mrowki.vertices <- NULL
+mrowki.solution <- NULL
 
 mrowki.op_init<-function(UG)
 {
@@ -13,7 +15,9 @@ mrowki.op_init<-function(UG)
 mrowki.model_init<-function(UG)
 {
   firstVertex = list(board = mrowki.task, sons = NULL )
-  M <- list(vertices = list(firstVertex), pheromons = list())
+  M <- list(pheromons = list())
+  mrowki.vertices <- list(firstVertex)
+  mrowki.solution <- NULL
   return(M)
 }
 
@@ -49,6 +53,9 @@ mrowki.model_update<-function(XS,M)
     value <- percent
     for(j in 1 : (trail - 1)){
       string <- paste(path[[j]],"->",path[[j+1]])
+      if( M$pheromons[[string]] == NULL){
+        M$pheromons[[string]] <- mrowki.startPheromon
+      }
       M$pheromons[[string]] <- M$pheromons + value
     }
   }
@@ -63,5 +70,5 @@ mrowki.model_update<-function(XS,M)
 mrowki.search<-function(){
   search(mrowki.model_init, mrowki.model_update, mrowki.op_init, mrowki.op_select, mrowki.op_generate, mrowki.stop_criterion, UG)
   
-  return(pop(1)[[1]])
+  return(mrowki.solution)
 }

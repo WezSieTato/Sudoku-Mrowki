@@ -221,7 +221,6 @@ mrowki.sudoku.op_generate <- function(XS,M,UG, WA=4) {
   PN <- mrowki.sudoku.extend_state(YS)
   AS <- mrowki.sudoku.set_attractivity(PN,WA)
   
-  
   while(mrowki.sudoku.there_is_move(PN)) {
     # zakladam, ze M to macierz 9x9x9 
     P <- mrowki.sudoku.set_propability_matrix(AS,PN,M$feromony) # zalozony stub, powinno byc jeszcze M w liscie argumentow
@@ -239,15 +238,19 @@ mrowki.sudoku.op_generate <- function(XS,M,UG, WA=4) {
   return(YS)
 }
 
-
 mrowki.sudoku.stop_criterion<-function(XS, M){
   path <- XS[[length(XS)]]
   lastId <- path[[length(path)]]
   vertex <- mrowki.vertices[[lastId]]
-  return(sudoku.is_complete(vertex$board))
+  
+  if(sudoku.is_complete(vertex$board)){
+    mrowki.solution(vertex$board)
+    return(TRUE)
+  } else{
+    return(FALSE)
+  }
+  
 }
-
-
 
 mrowki.sudoku <-function(task){
   sudoku.task <<- task
