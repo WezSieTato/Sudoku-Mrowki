@@ -54,3 +54,18 @@ sudoku.check_square <- function(prob_seq,i,j,s) {
   }
   return(prob_seq)
 }
+
+sudoku.new_board <- function(board,raw,column,value) {
+  board[raw,column] = value;
+  return (board)
+}
+
+sudoku.checkBoards <- function(f_board,s_board) {
+  for(i in 1:9) 
+    for(j in 1:9) {
+      if(f_board[i,j] != s_board[i,j]) 
+        return (FALSE)
+    }
+  
+  return (TRUE)
+}

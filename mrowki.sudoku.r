@@ -10,17 +10,18 @@ mrowki.sudoku.identity_number <- function() {
 
 
 mrowki.sudoku.init_state <- function() {
-  s = c()
-  s[1:9] =   c(0,0,0,0,0,0,3,1,0)
-  s[10:18] = c(0,0,0,3,0,9,0,0,5)
-  s[19:27] = c(9,3,0,6,0,0,2,0,8)
-  s[28:36] = c(1,0,4,0,0,0,5,8,0)
-  s[37:45] = c(0,6,3,7,4,5,1,9,0)
-  s[46:54] = c(0,7,2,0,0,0,4,0,3)
-  s[55:63] = c(7,0,1,0,0,8,0,2,6)
-  s[64:72] = c(6,0,0,1,0,7,0,0,0)
-  s[73:81] = c(0,4,8,0,0,0,0,0,0)
-  dim(s) = c(9,9)
+#  s = c()
+#  s[1:9] =   c(0,0,0,0,0,0,3,1,0)
+#  s[10:18] = c(0,0,0,3,0,9,0,0,5)
+#  s[19:27] = c(9,3,0,6,0,0,2,0,8)
+#  s[28:36] = c(1,0,4,0,0,0,5,8,0)
+#  s[37:45] = c(0,6,3,7,4,5,1,9,0)
+#  s[46:54] = c(0,7,2,0,0,0,4,0,3)
+#  s[55:63] = c(7,0,1,0,0,8,0,2,6)
+#  s[64:72] = c(6,0,0,1,0,7,0,0,0)
+#  s[73:81] = c(0,4,8,0,0,0,0,0,0)
+#  dim(s) = c(9,9)
+  s = list(1)
   return(s)
 }
 
@@ -74,15 +75,11 @@ mrowki.sudoku.set_attractivity <- function(pn,WA=4) {
   return (attr)
 }
 
-mrowki.sudoku.there_is_move <- function(pn) {
-  for(i in 1:9) {
-    for(j in 1:9){
-      if(length(pn[i,j][[1]]) != 0)
-        return (TRUE) 
-    }
-  }
+mrowki.sudoku.there_is_move <- function(id_sons) {
+  if(id_sons == list())
+    return (FALSE)
   
-  return (FALSE)
+  return (TRUE)
 }
 
 # 
@@ -105,8 +102,8 @@ mrowki.sudoku.set_propability_matrix <- function(attr, pn, pheromons) {
   return (prop_array)
 }
 
-mrowki.sudoku.rand_move <- function(P) {
-  return (sample(1:729,1,replace=FALSE,P))
+mrowki.sudoku.rand_move <- function(Elements,P) {
+  return (sample(x=Elements,size=1,replace=FALSE,prob=P))
 }
 
 mrowki.sudoku.get_rand_column <- function(numb) {
@@ -214,6 +211,34 @@ mrowki.sudoku.update_state <- function(YS,n_column,n_raw,n_value) {
   return(YS)
 }
 
+mrowki.sudoku.get_sons <- function(ID,M) {
+  if(M$vertices[[ID]] != NULL) {
+      return(M$vertices[[ID]]$sons)
+    
+  # if M$vertices[[ID]] == NULL
+  return(mrowki.sudoku.build_sons(ID,M))
+    
+}
+
+mrowki.sudoku.build_sons <- function(ID,M) {
+  board = M$vertices[[ID]]$board
+  vertices = M$vertices
+  for(i in 1:9)
+    for(j in 1:9)
+      if(board[i,j] == 0) {
+        seq = mrowki.sudoku.set_numb_seq(i,j,board)
+        for(k in seq) {
+          newboard = mrowki.sudoku.new_board(i,j,k)
+          for(m in 1:length(vertices)) {
+            mrowki.sudoku.checkBoards(newboard,vertices[[m]]$board)
+            
+          }
+        }
+      }
+      
+    
+}
+
 # M - model zawierajacy feromony
 # XS - wybrany ostatni stan
 # PN - ciagi mozliwych liczb do wstawienia w pola
@@ -221,22 +246,20 @@ mrowki.sudoku.update_state <- function(YS,n_column,n_raw,n_value) {
 # WA - wskaznik atrakcyjnosci
 mrowki.sudoku.op_generate <- function(XS,M,UG, WA=4) {
   YS <- mrowki.sudoku.init_state()
-  PN <- mrowki.sudoku.extend_state(YS)
-  AS <- mrowki.sudoku.set_attractivity(PN,WA)
   
+  ID <- YS[[1]]
   
-  while(mrowki.sudoku.there_is_move(PN)) {
+  sons <- mrowki.sudoku.get_sons(ID,M)
+    
+  while(mrowki.sudoku.there_is_move(M$vertices[[ID]]$sons)) {
     # zakladam, ze M to macierz 9x9x9 
-    P <- mrowki.sudoku.set_propability_matrix(AS,PN,M$feromony) # zalozony stub, powinno byc jeszcze M w liscie argumentow
-    N <- mrowki.sudoku.rand_move(P)
     
-    n_column <- mrowki.sudoku.get_rand_column(N)
-    n_raw <- mrowki.sudoku.get_rand_raw(N)
-    n_value <- mrowki.sudoku.get_rand_value(N)
+    X <- mrowki.sudoku.get_sons()
     
-    PN <- mrowki.sudoku.update_prop_number(PN,n_column,n_raw,n_value)
-    AS <- mrowki.sudoku.update_attractivity(AS,PN,n_column,n_raw,n_value)
-    YS <- mrowki.sudoku.update_state(YS,n_column,n_raw,n_value)
+    ID <- mrowki.sudoku.rand_move(X,P)
+    
+    
+    YS <- mrowki.sudoku.update_state(YS,ID)
   }
   
   return(YS)
