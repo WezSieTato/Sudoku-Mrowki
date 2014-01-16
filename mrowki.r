@@ -16,8 +16,9 @@ mrowki.model_init<-function(UG)
 {
   firstVertex = list(board = mrowki.task, sons = NULL )
   M <- list(pheromons = list())
-  mrowki.vertices <- list(firstVertex)
-  mrowki.solution <- NULL
+  mrowki.vertices <<- list(firstVertex)
+  mrowki.solution <<- NULL
+  print(mrowki.task)
   return(M)
 }
 
@@ -34,6 +35,8 @@ mrowki.stop_criterion<-function(XS, M)
 
 mrowki.op_select<-function(XS,M, UG)
 {
+  if(XS == 0)
+    return(list())
   if ((length(XS)) %% mrowki.antNumber != 0 )
     return(list())
   return(pop(mrowki.antNumber))
