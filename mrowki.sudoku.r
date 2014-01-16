@@ -248,27 +248,6 @@ mrowki.sudoku.stop_criterion<-function(XS, M){
 }
 
 
-mrowki.sudoku.zaznacz_odwiedzone<-function(XS, stanZero){
-  sciezki <- list()
-  for (j in 1: length(XS)){
-    XS[[j]] <- XS[[j]] - stanZero
-    sciezki[[j]] <- c(1)
-    for (k in 1:729){
-      sciezki[[j]][[k]] <- 0
-    }
-    dim(sciezki[[j]]) <- c(9,9,9)
-    
-    for (wiersz in 1:9){
-      for (kolumna in 1:9){
-        if(XS[[j]][wiersz, kolumna] != 0){
-          sciezki[[j]][wiersz, kolumna, XS[[j]][wiersz, kolumna]] <- 1
-        }
-      }
-    }
-  }
-  
-  return(sciezki)
-}
 
 mrowki.sudoku <-function(task){
   sudoku.task <<- task
