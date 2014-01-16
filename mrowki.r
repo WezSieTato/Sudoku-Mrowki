@@ -1,8 +1,10 @@
 
 source('mht.r')
 
-mrowki.iloscMrowek <- 1
-mrowki.startoweFeromony <- 0.5
+mrowki.antNumber <- 1
+mrowki.pheromonDegradation <- 0.81
+mrowki.startPheromon <- 0.5
+mrowki.task <- NULL
 
 ## funkcja zalezna od problemu
 # na podstawie stanow odwiedzonych przez mrowki
@@ -23,6 +25,12 @@ mrowki.op_init<-function(UG)
   stop('Brak implementacji funkcji inicjujacej stan poczatkowy')
 }
 
+mrowki.model_init<-function(UG)
+{
+  firstVertex = list(board = mrowki.task, sons = NULL )
+  M <- list(vertices = list(firstVertex), pheromons = list())
+  return(M)
+}
 
 mrowki.op_generate<-function(XS,M,UG)
 {
@@ -48,19 +56,22 @@ mrowki.model_update<-function(XS,M)
     return(M)
   }
   
-  #lista tablic z przebytymi sciezkami
-  przebyte <- mrowki.zaznacz_odwiedzone(XS, mrowki.op_init() )
-  wielkosc_tablicy <- length(przebyte[[1]])
-  for (i in 1: length(przebyte)){
-    tablica <- table(przebyte[[i]])
-    dlugosc_drogi <- wielkosc_tablicy - tablica[names(tablica) == 0][[1]]
-    procent <-  dlugosc_drogi / wielkosc_tablicy
-    przebyte[[i]] <- replace (przebyte[[i]], przebyte[[i]] == 1, procent)
-    M$feromony <- M$feromony + przebyte[[i]]
+  #######
+  for(i in 1 : length(XS)){
+    path <- XS[[i]]
+    trail <- length(path)
+    percent <- trail / 81
+    value <- percent
+    for(j in 1 : (trail - 1)){
+      string <- paste(path[[j]],"->",path[[j+1]])
+      M$pheromons[[string]] <- M$pheromons + value
+    }
   }
   
-  M$feromony <- M$feromony * M$trwalosc_feromonu
-  M$feromony <- replace(M$feromony, M$feromony < 0.1, 0.1)
+  for(k in 1 : length(M$pheromons)){
+    M$pheromons[[k]] <- M$pheromons[[k]] * mrowki.pheromonDegradation
+  }
+  
   return(M)
 }
 
