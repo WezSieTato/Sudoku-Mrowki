@@ -34,14 +34,10 @@ mrowki.stop_criterion<-function(XS, M)
   stop('Brak implementacji funkcji stopu')
 }
 
-mrowki.model_init<-function(UG){
-  model <- list(feromony = mrowki.feromony_init(mrowki.startoweFeromony),trwalosc_feromonu = 0.81)
-  return(model)
-}
 
 mrowki.op_select<-function(XS,M, UG)
 {
-  if ((length(XS) - 1) %% mrowki.iloscMrowek != 0 )
+  if ((length(XS)) %% mrowki.iloscMrowek != 0 )
     return(list())
   return(pop(mrowki.iloscMrowek))
 }

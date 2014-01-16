@@ -90,7 +90,9 @@ mrowki.sudoku.set_propability_matrix <- function(attr, pn, pheromons) {
   # pher = array(data=0, dim=c(9,9,9)) # stub chwilowy
   prop_array = array(data=0, dim=c(9,9,9))
   
-  pheromons <- pheromons/max(pheromons) # normalizacja
+  pheromons <- pheromons/sum(pheromons) # normalizacja
+  attr <- attr/sum(attr)
+
   
   for(i in 1:9) {
     for(j in 1:9) {
@@ -241,20 +243,10 @@ mrowki.sudoku.op_generate <- function(XS,M,UG, WA=4) {
 }
 
 
-
-
 mrowki.sudoku.stop_criterion<-function(XS, M){
   return(sudoku.is_complete(XS[[length(XS)]]))
 }
 
-mrowki.sudoku.feromony_init<-function(startoweFeromony){
-  feromony <- c()
-  for (k in 1:729){
-    feromony[[k]] <- startoweFeromony
-  }
-  dim(feromony) <- c(9,9,9)
-  return(feromony)
-}
 
 mrowki.sudoku.zaznacz_odwiedzone<-function(XS, stanZero){
   sciezki <- list()

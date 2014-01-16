@@ -81,7 +81,7 @@ search<-function(model_init,model_update, op_init, op_select,op_generate, stop_c
 {
   trace_init()
   
-  push(op_init(UG))
+#  push(op_init(UG))
   M<-model_init(UG)
   
   while (!stop_criterion(pop(),M))
