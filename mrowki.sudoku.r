@@ -20,18 +20,6 @@ mrowki.sudoku.init_state <- function() {
   return(s)
 }
 
-mrowki.sudoku.extend_state <- function(s) {
-  seq = array(data=list(), dim = c(9,9))
-  for(i in 1:9) {
-    for(j in 1:9) {
-      if(s[j,i] == 0) {
-        seq[j,i][[1]] <- sudoku.set_numb_seq(i,j,s)
-      } 
-    }
-  }
-  return(seq)
-}
-
 mrowki.sudoku.there_is_move <- function(id_sons) {
   if(length(sons) == 0)
     return (FALSE)
