@@ -41,9 +41,6 @@ mrowki.sudoku.extend_state <- function(s) {
   return(seq)
 }
 
-
-
-
 mrowki.sudoku.set_square_iter_seq <- function(position) {
   temp <- position %% 3 
   if(temp == 0) { 

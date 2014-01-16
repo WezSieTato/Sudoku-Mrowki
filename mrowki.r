@@ -6,20 +6,6 @@ mrowki.pheromonDegradation <- 0.81
 mrowki.startPheromon <- 0.5
 mrowki.task <- NULL
 
-## funkcja zalezna od problemu
-# na podstawie stanow odwiedzonych przez mrowki
-# zaznacza w tablicy rownej wymiarom tej do feromonow
-# przebyte wierzcholki
-mrowki.zaznacz_odwiedzone<-function(XS, stanZero){
-  stop('Brak implementacji funkcji zaznaczajacej odwiedzone wierzcholki')
-}
-
-## funkcja zalezna od problemu
-# inicjuje tablice z feromonami
-mrowki.feromony_init<-function(startoweFeromony){
-  stop('Brak implementacji funkcji inicjujacej feromony')
-}
-
 mrowki.op_init<-function(UG)
 {
   stop('Brak implementacji funkcji inicjujacej stan poczatkowy')
@@ -45,9 +31,9 @@ mrowki.stop_criterion<-function(XS, M)
 
 mrowki.op_select<-function(XS,M, UG)
 {
-  if ((length(XS)) %% mrowki.iloscMrowek != 0 )
+  if ((length(XS)) %% mrowki.antNumber != 0 )
     return(list())
-  return(pop(mrowki.iloscMrowek))
+  return(pop(mrowki.antNumber))
 }
 
 mrowki.model_update<-function(XS,M)
