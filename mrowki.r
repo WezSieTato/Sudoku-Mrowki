@@ -57,10 +57,10 @@ mrowki.model_update<-function(XS,M)
     value <- percent
     for(j in 1 : (trail - 1)){
       string <- paste(path[[j]],"->",path[[j+1]])
-      if( M$pheromons[[string]] == NULL){
+      if( is.null(M$pheromons[[string]])){
         M$pheromons[[string]] <- mrowki.startPheromon
       }
-      M$pheromons[[string]] <- M$pheromons + value
+      M$pheromons[[string]] <- M$pheromons[[string]] + value
     }
   }
   
