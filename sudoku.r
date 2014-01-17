@@ -12,8 +12,8 @@ sudoku.is_complete<- function(sudoku){
 # s - macierz stanu
 sudoku.set_numb_seq <- function(i,j,s) {
   prob_seq <- 1:9
-  prob_seq <- sudoku.check_raw(prob_seq,j,s)
-  prob_seq <- sudoku.check_column(prob_seq,i,s)
+  prob_seq <- sudoku.check_raw(prob_seq,i,s)
+  prob_seq <- sudoku.check_column(prob_seq,j,s)
   prob_seq <- sudoku.check_square(prob_seq,i,j,s)
   return(prob_seq)
 }
