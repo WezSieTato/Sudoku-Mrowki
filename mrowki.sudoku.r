@@ -19,22 +19,20 @@ mrowki.sudoku.there_is_move <- function(sons) {
 
 
 mrowki.sudoku.rand_move <- function(Elements,P) {
-  return (sample(x=Elements,size=1,replace=FALSE,prob=P)[[1]])
+  return ((sample(x=Elements,size=1,replace=FALSE,prob=P))[[1]])
 }
 
-mrowki.sudoku.update_state <- function(YS,n_column,n_raw,n_value) {
-  YS[n_raw,n_column] <- n_value
+mrowki.sudoku.update_state <- function(YS,e) {
+  YS[length(YS)+1] <- e
   return(YS)
 }
 
 mrowki.sudoku.get_sons <- function(ID) {
-  if(is.null(mrowki.vertices)) {
-      return(mrowki.vertices[[ID]]$sons)
+  if(is.null(mrowki.vertices[[ID]]$sons)) {
+    return(mrowki.sudoku.build_sons(ID))
   }
   
-  # if M$vertices[[ID]] == NULL
-  return(mrowki.sudoku.build_sons(ID))
-    
+  return(mrowki.vertices[[ID]]$sons)
 }
 
 mrowki.sudoku.add_son <- function(B) {
@@ -42,24 +40,26 @@ mrowki.sudoku.add_son <- function(B) {
   
   mrowki.vertices[[length(mrowki.vertices)+1]] <<- newVertex
   
-  return(length(mrowki.vertices)+1)
+  return(length(mrowki.vertices))
 }
 
 mrowki.sudoku.build_sons <- function(ID) {
+  mrowki.vertices[[ID]]$sons <<- list()
+  
   board = mrowki.vertices[[ID]]$board
-  for(i in 1:9)
-    for(j in 1:9)
+  for(i in 1:9) {
+    for(j in 1:9) {
       if(board[i,j] == 0) {
         seq = sudoku.set_numb_seq(i,j,board)
         for(k in seq) {
           newboard = sudoku.new_board(board,i,j,k)
           newID = -1
-          for(m in 1:length(mrowki.vertices))
+          for(m in 1:length(mrowki.vertices)) {
             if(sudoku.check_boards(newboard,mrowki.vertices[[m]]$board)) {
               newID = m
               break
             }
-          
+          }
           if(newID == -1) {
             newID = mrowki.sudoku.add_son(newboard)
           }
@@ -68,7 +68,8 @@ mrowki.sudoku.build_sons <- function(ID) {
           
         }
       }
-  
+    }
+  }
   return(mrowki.vertices[[ID]]$sons)
       
     
@@ -101,6 +102,7 @@ mrowki.sudoku.op_generate <- function(XS,M,UG, WA=4) {
     ID <- mrowki.sudoku.rand_move(X,P)
     
     YS <- mrowki.sudoku.update_state(YS,ID)
+    
     
     X <- mrowki.sudoku.get_sons(ID)
   }
