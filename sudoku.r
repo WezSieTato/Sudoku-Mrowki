@@ -47,8 +47,8 @@ sudoku.check_square <- function(prob_seq,i,j,s) {
   n_seq <- sudoku.set_square_iter_seq(j)
   for(m in m_seq) {
     for(n in n_seq) {
-      if(s[n,m] != 0) {
-        prob_seq <- prob_seq[prob_seq!=s[n,m]]
+      if(s[m,n] != 0) {
+        prob_seq <- prob_seq[prob_seq!=s[m,n]]
       }
     }
   }
