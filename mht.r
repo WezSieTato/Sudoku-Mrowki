@@ -19,9 +19,8 @@ push<-function(XS)
 pop<-function(n=Inf)
 {
   len <- length(xtrace)
-  if (len == 0)
-    return(0)
-  
+  if(len == 0)
+    return(list())
   return(xtrace[max(len-n+1,1):len])
 }
 

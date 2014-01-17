@@ -112,14 +112,15 @@ mrowki.sudoku.op_generate <- function(XS,M,UG, WA=4) {
 
 mrowki.sudoku.stop_criterion<-function(XS, M){
  # print('asdasd')
-  if(XS == 0)
+  if(length(XS) == 0)
     return(FALSE)
+  
   path <- XS[[length(XS)]]
   lastId <- path[[length(path)]]
   vertex <- mrowki.vertices[[lastId]]
   
   if(sudoku.is_complete(vertex$board)){
-    mrowki.solution(vertex$board)
+    mrowki.solution <<- vertex$board
     return(TRUE)
   } else{
     return(FALSE)
@@ -157,3 +158,4 @@ mrowki.sudoku <-function(){
 print('Rozwiazujemy sudoku')
 mrowki.sudoku()
 print('Rozwiazane sudoku')
+print(mrowki.solution)

@@ -4,7 +4,7 @@ sudoku.task <- c()
 # TRUE - jesli wypelnione (nie wazne czy poprawnie)
 sudoku.is_complete<- function(sudoku){
   tablica <- table(sudoku)
-   return (tablica[names(tablica) == 0][[1]] == 0)
+   return (!is.element(0, sudoku) )
 }
 
 # i - rzad polozenia punktu
