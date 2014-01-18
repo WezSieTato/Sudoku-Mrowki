@@ -9,7 +9,9 @@ mrowki.solution <- NULL
 
 mrowki.op_init<-function(UG)
 {
-  stop('Brak implementacji funkcji inicjujacej stan poczatkowy')
+  
+  s = list(1)
+  return(s)
 }
 
 mrowki.model_init<-function(UG)

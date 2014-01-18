@@ -4,12 +4,6 @@ source('sudoku.r')
 #model init jest w mrowkach, model init czesciowo korzysta z funkcji
 # ktore sa w mrowki.sudoku, ale sama funkcja jest w mrowkach
 
-mrowki.sudoku.init_state <- function() {
-
-  s = list(1)
-  return(s)
-}
-
 mrowki.sudoku.extend_state <- function(s) {
   seq = array(data=list(), dim = c(9,9))
   for(i in 1:9) {
@@ -143,9 +137,8 @@ mrowki.sudoku.get_pheromons <- function(ID, sons, pheromons) {
 
 
 mrowki.sudoku.op_generate <- function(XS,M,UG, WA=4) {
-  YS <- mrowki.sudoku.init_state()
+  YS <- mrowki.op_init()
   
-
   ID <- YS[[1]]
   
   X <- mrowki.sudoku.get_sons(ID)
@@ -229,15 +222,15 @@ mrowki.sudoku <-function(ants = 1){
 #  s[73:81] = c(0,0,0,0,0,0,0,0,0)
 
 # pusta
-  s[1:9] =   c(1,2,3,4,5,6,7,8,9)
-  s[10:18] = c(4,5,0,7,8,0,1,2,3)
-  s[19:27] = c(7,8,0,1,2,3,4,5,6)
-  s[28:36] = c(2,1,4,3,6,0,8,9,7)
-  s[37:45] = c(0,6,5,0,9,7,2,1,4)
-  s[46:54] = c(8,9,0,2,1,4,3,6,5)
-  s[55:63] = c(5,3,1,6,4,2,9,7,8)
-  s[64:72] = c(0,0,0,0,0,0,0,0,0)
-  s[73:81] = c(0,0,8,5,3,1,0,0,0)
+s[1:9] =   c(1,2,3,4,5,6,7,8,9)
+s[10:18] = c(4,5,6,7,8,9,1,2,3)
+s[19:27] = c(7,8,9,1,2,3,4,5,6)
+s[28:36] = c(2,1,4,3,6,5,8,9,7)
+s[37:45] = c(3,6,5,8,9,7,2,1,4)
+s[46:54] = c(8,9,7,2,1,4,3,6,5)
+s[55:63] = c(5,3,1,6,4,2,9,7,8)
+s[64:72] = c(6,4,2,9,7,8,5,3,1)
+s[73:81] = c(9,7,8,5,3,1,6,4,2)
   dim(s) = c(9,9)
   
   sudoku.task <<- s
@@ -245,10 +238,6 @@ mrowki.sudoku <-function(ants = 1){
   mrowki.op_generate <<- mrowki.sudoku.op_generate
   mrowki.stop_criterion <<- mrowki.sudoku.stop_criterion
   
-  mrowki.op_init<<-function(UG)
-  {
-    return (list(1))
-  }
   
   return (mrowki.search())
 }
