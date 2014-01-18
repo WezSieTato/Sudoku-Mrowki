@@ -24,11 +24,6 @@ mrowki.model_init<-function(UG)
   return(M)
 }
 
-mrowki.op_generate<-function(XS,M,UG)
-{
-  stop('Brak implementacji funkcji generujacej stany')
-}
-
 mrowki.stop_criterion<-function(XS, M)
 {
   stop('Brak implementacji funkcji stopu')
@@ -77,3 +72,109 @@ mrowki.search<-function(){
   
   return(mrowki.solution)
 }
+
+#################################
+##Dzialania na rzecz
+##dodania kolonii
+##do algorytmu sortowania
+#################################
+
+mrowki.build_sons <- function(ID){
+  stop('Brak implementacji')
+}
+
+mrowki.is_complete <-function(board){
+  stop('Brak implementacji')
+}
+
+mrowki.there_is_move <- function(sons) {
+  if(length(sons) == 0)
+    return (FALSE)
+  return (TRUE)
+}
+
+mrowki.rand_move <- function(Elements,P) {
+  return ((sample(x=Elements,size=1,replace=FALSE,prob=P))[[1]])
+}
+
+
+mrowki.get_sons <- function(ID) {
+  if(is.null(mrowki.vertices[[ID]]$sons)) {
+    return(mrowki.build_sons(ID))
+  }
+  
+  return(mrowki.vertices[[ID]]$sons)
+}
+
+mrowki.add_son <- function(B) {
+  newVertex = list(board = B, sons = NULL)
+  
+  mrowki.vertices[[length(mrowki.vertices)+1]] <<- newVertex
+  
+  return(length(mrowki.vertices))
+}
+
+mrowki.update_state <- function(YS,e) {
+  YS[length(YS)+1] <- e
+  return(YS)
+}
+
+mrowki.get_pheromons <- function(ID, sons, pheromons) {
+  prob = list()
+  for(i in 1:length(sons)) {
+    if(is.null(pheromons[[paste(ID,"->",sons[[i]])]])) {
+      prob[[i]] = mrowki.startPheromon
+    } else {
+      prob[[i]] = pheromons[[paste(ID,"->",sons[[i]])]]
+    }
+    
+    
+  }
+  ### ten blok umozliwia podlaczenie atrakcyjnosci
+  #  max = which.max(prob)
+  #  for(i in 1:length(prob)) {
+  #    prob[[1]] <- prob[[1]] / max
+  #  }
+  #  attr <- mrowki.sudoku.set_attractivity(mrowki.vertices[[ID]]$board)
+  #  for(i in 1:length(sons)) {
+  #    prob[[i]] <- prob[[i]] + mrowki.sudoku.get_attractivity(mrowki.vertices[[ID]]$board,mrowki.vertices[[sons[[i]]]]$board,attr)
+  #  }
+  ### /ten blok umozliwia podlaczenie atrakcyjnosci
+  return(prob)
+}
+
+mrowki.op_generate <- function(XS,M,UG, WA=4) {
+  YS <- mrowki.op_init()
+  
+  ID <- YS[[1]]
+  
+  X <- mrowki.get_sons(ID)
+  
+  while(mrowki.there_is_move(X)) {
+    P <- mrowki.get_pheromons(ID,X,M$pheromons)
+    
+    ID <- mrowki.rand_move(X,P)
+    
+    YS <- mrowki.update_state(YS,ID)
+    
+    X <- mrowki.get_sons(ID)
+  }
+  
+  return(YS)
+}
+
+mrowki.stop_criterion<-function(XS, M){
+  
+  path <- XS[[length(XS)]]
+  lastId <- path[[length(path)]]
+  vertex <- mrowki.vertices[[lastId]]
+  
+  if(mrowki.is_complete(vertex$board)){
+    mrowki.solution <<- vertex$board
+    return(TRUE)
+  } else{
+    return(FALSE)
+  }
+  
+}
+

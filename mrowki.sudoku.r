@@ -45,40 +45,6 @@ mrowki.sudoku.get_attractivity <- function(boardFirst,boardSecond,attr) {
   stop("Cos sie zlego stalo")
 }
 
-
-mrowki.sudoku.there_is_move <- function(sons) {
-  if(length(sons) == 0)
-    return (FALSE)
-  
-  return (TRUE)
-}
-
-
-mrowki.sudoku.rand_move <- function(Elements,P) {
-  return ((sample(x=Elements,size=1,replace=FALSE,prob=P))[[1]])
-}
-
-mrowki.sudoku.update_state <- function(YS,e) {
-  YS[length(YS)+1] <- e
-  return(YS)
-}
-
-mrowki.sudoku.get_sons <- function(ID) {
-  if(is.null(mrowki.vertices[[ID]]$sons)) {
-    return(mrowki.sudoku.build_sons(ID))
-  }
-  
-  return(mrowki.vertices[[ID]]$sons)
-}
-
-mrowki.sudoku.add_son <- function(B) {
-  newVertex = list(board = B, sons = NULL)
-  
-  mrowki.vertices[[length(mrowki.vertices)+1]] <<- newVertex
-  
-  return(length(mrowki.vertices))
-}
-
 mrowki.sudoku.build_sons <- function(ID) {
   mrowki.vertices[[ID]]$sons <<- list()
   
@@ -97,7 +63,7 @@ mrowki.sudoku.build_sons <- function(ID) {
             }
           }
           if(newID == -1) {
-            newID = mrowki.sudoku.add_son(newboard)
+            newID = mrowki.add_son(newboard)
           }
           
           mrowki.vertices[[ID]]$sons[[length(mrowki.vertices[[ID]]$sons)+1]] <<- newID
@@ -109,70 +75,6 @@ mrowki.sudoku.build_sons <- function(ID) {
   return(mrowki.vertices[[ID]]$sons)
       
     
-}
-
-mrowki.sudoku.get_pheromons <- function(ID, sons, pheromons) {
-  prob = list()
-  for(i in 1:length(sons)) {
-    if(is.null(pheromons[[paste(ID,"->",sons[[i]])]])) {
-      prob[[i]] = mrowki.startPheromon
-    } else {
-      prob[[i]] = pheromons[[paste(ID,"->",sons[[i]])]]
-    }
-  
-    
-  }
-  ### ten blok umozliwia podlaczenie atrakcyjnosci
-#  max = which.max(prob)
-#  for(i in 1:length(prob)) {
-#    prob[[1]] <- prob[[1]] / max
-#  }
-#  attr <- mrowki.sudoku.set_attractivity(mrowki.vertices[[ID]]$board)
-#  for(i in 1:length(sons)) {
-#    prob[[i]] <- prob[[i]] + mrowki.sudoku.get_attractivity(mrowki.vertices[[ID]]$board,mrowki.vertices[[sons[[i]]]]$board,attr)
-#  }
-  ### /ten blok umozliwia podlaczenie atrakcyjnosci
-  return(prob)
-}
-
-
-mrowki.sudoku.op_generate <- function(XS,M,UG, WA=4) {
-  YS <- mrowki.op_init()
-  
-  ID <- YS[[1]]
-  
-  X <- mrowki.sudoku.get_sons(ID)
-    
-  while(mrowki.sudoku.there_is_move(X)) {
-    P <- mrowki.sudoku.get_pheromons(ID,X,M$pheromons)
-    
-    ID <- mrowki.sudoku.rand_move(X,P)
-    
-    YS <- mrowki.sudoku.update_state(YS,ID)
-    
-    
-    X <- mrowki.sudoku.get_sons(ID)
-  }
-  
-  return(YS)
-}
-
-mrowki.sudoku.stop_criterion<-function(XS, M){
- # print('asdasd')
-  if(length(XS) == 0)
-    return(FALSE)
-  
-  path <- XS[[length(XS)]]
-  lastId <- path[[length(path)]]
-  vertex <- mrowki.vertices[[lastId]]
-  
-  if(sudoku.is_complete(vertex$board)){
-    mrowki.solution <<- vertex$board
-    return(TRUE)
-  } else{
-    return(FALSE)
-  }
-  
 }
 
 mrowki.sudoku <-function(ants = 1){
@@ -228,15 +130,15 @@ s[19:27] = c(7,8,9,1,2,3,4,5,6)
 s[28:36] = c(2,1,4,3,6,5,8,9,7)
 s[37:45] = c(3,6,5,8,9,7,2,1,4)
 s[46:54] = c(8,9,7,2,1,4,3,6,5)
-s[55:63] = c(5,3,1,6,4,2,9,7,8)
-s[64:72] = c(6,4,2,9,7,8,5,3,1)
-s[73:81] = c(9,7,8,5,3,1,6,4,2)
+s[55:63] = c(5,3,1,6,0,2,0,0,0)
+s[64:72] = c(6,4,2,9,7,8,0,0,0)
+s[73:81] = c(9,7,8,5,3,1,0,0,0)
   dim(s) = c(9,9)
   
   sudoku.task <<- s
   mrowki.task <<- s
-  mrowki.op_generate <<- mrowki.sudoku.op_generate
-  mrowki.stop_criterion <<- mrowki.sudoku.stop_criterion
+  mrowki.build_sons <<- mrowki.sudoku.build_sons
+  mrowki.is_complete <<- sudoku.is_complete
   
   
   return (mrowki.search())
