@@ -182,7 +182,7 @@ mrowki.sudoku.stop_criterion<-function(XS, M){
   
 }
 
-mrowki.sudoku <-function(){
+mrowki.sudoku <-function(ants = 1){
   s = c()
 # Z jednym  
 #  s[1:9] =   c(1,2,3,4,5,6,7,8,9)
@@ -252,9 +252,3 @@ mrowki.sudoku <-function(){
   
   return (mrowki.search())
 }
-
-
-print('Rozwiazujemy sudoku')
-mrowki.sudoku()
-print('Rozwiazane sudoku')
-print(mrowki.solution)
