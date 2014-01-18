@@ -247,7 +247,7 @@ mrowki.sudoku <-function(ants = 1){
   
   mrowki.op_init<<-function(UG)
   {
-    return (sudoku.task)
+    return (list(1))
   }
   
   return (mrowki.search())

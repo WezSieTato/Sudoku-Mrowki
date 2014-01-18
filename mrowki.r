@@ -9,7 +9,6 @@ mrowki.solution <- NULL
 
 mrowki.op_init<-function(UG)
 {
-  return(NULL)
   stop('Brak implementacji funkcji inicjujacej stan poczatkowy')
 }
 
@@ -36,9 +35,9 @@ mrowki.stop_criterion<-function(XS, M)
 
 mrowki.op_select<-function(XS,M, UG)
 {
-  if(length(XS) == 0)
+  if(length(XS) == 1)
     return(list())
-  if ((length(XS)) %% mrowki.antNumber != 0 )
+  if ((length(XS) - 1) %% mrowki.antNumber != 0 )
     return(list())
   return(pop(mrowki.antNumber))
 }
