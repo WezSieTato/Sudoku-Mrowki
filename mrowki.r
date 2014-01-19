@@ -14,9 +14,13 @@ mrowki.op_init<-function(UG)
   return(s)
 }
 
+mrowki.first_vertex <- function(){
+  stop('Brak implementacji')
+}
+
 mrowki.model_init<-function(UG)
 {
-  firstVertex = list(board = mrowki.task, sons = NULL )
+  firstVertex <- mrowki.first_vertex() 
   M <- list(pheromons = list())
   mrowki.vertices <<- list(firstVertex)
   mrowki.solution <<- NULL

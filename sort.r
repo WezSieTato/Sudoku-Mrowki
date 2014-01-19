@@ -6,7 +6,7 @@ sort.task <- c() # wektor z liczbami do posortowania, definiuje przestrzeń zada
 sort.neighbours <- function(V){
 	res<-list()
 		x <- V
-  cost <- sort.cost(x)
+  cost <- sort.cost(V)
 		for(j in 1:(length(x)-1)){
 			for(k in (j+1):length(x)){
           res[[length(res)+1]] <- sort.swap(x,j,k)
@@ -30,7 +30,7 @@ sort.swap <- function(x,i,j){
 # Funkcja zwraca oszacowanie kosztu posortowania wektora
 # 0 - oznacza, że wektor sort.task[x] jes posortowany rosnąco.
 sort.cost <- function(x){
-  s <- x
+  s <- sort.task[x]
 	len <- length(s)
 	q = 0
 	

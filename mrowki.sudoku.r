@@ -147,6 +147,10 @@ s[73:81] = c(9,7,8,5,3,1,0,0,0)
     return (!mrowki.there_is_move(mrowki.get_sons(ID)))
   }
 
+  mrowki.first_vertex <<-function(){
+    return(list(board = mrowki.task, sons = NULL ))
+  }
+
   mrowki.build_sons <<- mrowki.sudoku.build_sons
 #  mrowki.is_complete <<- sudoku.is_complete
   

@@ -26,7 +26,7 @@ mrowki.stop_criterion<-function(XS, M){
 }
 
 mrowki.sort <-function(ants = 1){
-  sort.task <<- c(2,-6,1)
+  sort.task <<- c(2,-6,1,2,-23,-223,2,2,2)
   mrowki.task <<- sort.task
   mrowki.trail <<- function(delta){
     return (delta / length(mrowki.task))
@@ -34,6 +34,14 @@ mrowki.sort <-function(ants = 1){
   
   mrowki.stop_ant <<- function(ID){
     return (sort.is_complete(mrowki.vertices[[ID]]$board))
+  }
+  
+  mrowki.first_vertex <<-function(){
+    vector <- c()
+    for (i in 1 : length(sort.task)){
+      vector[[i]] <- i
+    }
+    return(list(board = vector, sons = NULL ))
   }
   
   mrowki.build_sons <<- mrowki.sort.build_sons
@@ -44,4 +52,4 @@ mrowki.sort <-function(ants = 1){
 print('Rozwiazujemy sudoku')
 mrowki.sort()
 print('Rozwiazane sudoku')
-print(mrowki.solution)
+print(sort.task[mrowki.solution])
