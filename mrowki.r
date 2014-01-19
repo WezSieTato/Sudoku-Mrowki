@@ -69,6 +69,8 @@ mrowki.model_update<-function(XS,M)
   
   for(k in 1 : length(M$pheromons)){
     M$pheromons[[k]] <- M$pheromons[[k]] * mrowki.pheromonDegradation
+    if(M$pheromons[[k]] < 0.05)
+      M$pheromons[[k]] <- 0.05
   }
   
   return(M)
@@ -157,18 +159,22 @@ mrowki.op_generate <- function(XS,M,UG, WA=4) {
   
   ID <- YS[[1]]
   
-  X <- mrowki.get_sons(ID)
-  
 #  while(mrowki.there_is_move(X)) {
   while(!mrowki.stop_ant(ID)) {
-      
+    
+    X <- mrowki.get_sons(ID)
+    for(i in 1 : length(X)){
+      if(is.element(X[[i]], YS))
+        YS <- YS[-which(YS == X[[i]])]
+    }
     P <- mrowki.get_pheromons(ID,X,M$pheromons)
     
     ID <- mrowki.rand_move(X,P)
+#    while(is.element(ID, YS))
+#      ID <- mrowki.rand_move(X,P)
     
     YS <- mrowki.update_state(YS,ID)
     
-    X <- mrowki.get_sons(ID)
   }
   
   return(YS)

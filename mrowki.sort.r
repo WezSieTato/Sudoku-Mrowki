@@ -26,10 +26,10 @@ mrowki.stop_criterion<-function(XS, M){
 }
 
 mrowki.sort <-function(ants = 1){
-  sort.task <<- c(2,-6,1,2,-23,-223,2,2,2)
+  sort.task <<- c(2,-6,1,-2, 1, 0)
   mrowki.task <<- sort.task
   mrowki.trail <<- function(delta){
-    return (delta / length(mrowki.task))
+    return (1 - (delta / length(mrowki.task)))
   }
   
   mrowki.stop_ant <<- function(ID){
