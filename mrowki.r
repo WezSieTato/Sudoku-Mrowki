@@ -178,3 +178,6 @@ mrowki.stop_criterion<-function(XS, M){
   
 }
 
+mrowki.check_boards<- function(f_board,s_board) {
+  return(all(f_board == s_board))
+}

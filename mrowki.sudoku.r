@@ -57,7 +57,7 @@ mrowki.sudoku.build_sons <- function(ID) {
           newboard = sudoku.new_board(board,i,j,k)
           newID = -1
           for(m in 1:length(mrowki.vertices)) {
-            if(sudoku.check_boards(newboard,mrowki.vertices[[m]]$board)) {
+            if(mrowki.check_boards(newboard,mrowki.vertices[[m]]$board)) {
               newID = m
               break
             }
@@ -73,8 +73,6 @@ mrowki.sudoku.build_sons <- function(ID) {
     }
   }
   return(mrowki.vertices[[ID]]$sons)
-      
-    
 }
 
 mrowki.sudoku <-function(ants = 1){

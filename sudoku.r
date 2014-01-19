@@ -3,7 +3,6 @@ sudoku.task <- c()
 #przyjmuje tablice 9x9 i sprawdza czy sudoku jest wypelnione
 # TRUE - jesli wypelnione (nie wazne czy poprawnie)
 sudoku.is_complete<- function(sudoku){
-  tablica <- table(sudoku)
    return (!is.element(0, sudoku) )
 }
 
@@ -74,14 +73,4 @@ sudoku.set_square_iter_seq <- function(position) {
 sudoku.new_board <- function(board,raw,column,value) {
   board[raw,column] = value;
   return (board)
-}
-
-sudoku.check_boards<- function(f_board,s_board) {
-  for(i in 1:9) 
-    for(j in 1:9) {
-      if(f_board[i,j] != s_board[i,j]) 
-        return (FALSE)
-    }
-  
-  return (TRUE)
 }
