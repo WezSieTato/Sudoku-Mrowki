@@ -39,6 +39,10 @@ mrowki.op_select<-function(XS,M, UG)
   return(pop(mrowki.antNumber))
 }
 
+mrowki.trail <- function(delta){
+  stop('Brak implementacji funkcji stopu')
+}
+
 mrowki.model_update<-function(XS,M)
 {
   if(length(XS) == 0){
@@ -49,8 +53,7 @@ mrowki.model_update<-function(XS,M)
   for(i in 1 : length(XS)){
     path <- XS[[i]]
     trail <- length(path)
-    percent <- trail / 81
-    value <- percent
+    value <- mrowki.trail(trail)
     for(j in 1 : (trail - 1)){
       string <- paste(path[[j]],"->",path[[j+1]])
       if( is.null(M$pheromons[[string]])){
@@ -88,9 +91,7 @@ mrowki.is_complete <-function(board){
 }
 
 mrowki.there_is_move <- function(sons) {
-  if(length(sons) == 0)
-    return (FALSE)
-  return (TRUE)
+  return (!(length(sons) == 0))
 }
 
 mrowki.rand_move <- function(Elements,P) {
@@ -143,6 +144,10 @@ mrowki.get_pheromons <- function(ID, sons, pheromons) {
   return(prob)
 }
 
+mrowki.stop_ant <- function(ID){
+  stop('Brak implementacji')
+}
+
 mrowki.op_generate <- function(XS,M,UG, WA=4) {
   YS <- mrowki.op_init()
   
@@ -150,7 +155,9 @@ mrowki.op_generate <- function(XS,M,UG, WA=4) {
   
   X <- mrowki.get_sons(ID)
   
-  while(mrowki.there_is_move(X)) {
+#  while(mrowki.there_is_move(X)) {
+  while(!mrowki.stop_ant(ID)) {
+      
     P <- mrowki.get_pheromons(ID,X,M$pheromons)
     
     ID <- mrowki.rand_move(X,P)
@@ -163,21 +170,22 @@ mrowki.op_generate <- function(XS,M,UG, WA=4) {
   return(YS)
 }
 
-mrowki.stop_criterion<-function(XS, M){
-  
-  path <- XS[[length(XS)]]
-  lastId <- path[[length(path)]]
-  vertex <- mrowki.vertices[[lastId]]
-  
-  if(mrowki.is_complete(vertex$board)){
-    mrowki.solution <<- vertex$board
-    return(TRUE)
-  } else{
-    return(FALSE)
-  }
-  
-}
+
 
 mrowki.check_boards<- function(f_board,s_board) {
   return(all(f_board == s_board))
+}
+
+mrowki.getID <- function(board){
+  newID <- -1
+  for(m in 1:length(mrowki.vertices)) {
+    if(mrowki.check_boards(board,mrowki.vertices[[m]]$board)) {
+      newID = m
+      break
+    }
+  }
+  if(newID == -1) {
+    newID = mrowki.add_son(board)
+  }
+  return(newID)
 }

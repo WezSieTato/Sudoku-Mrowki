@@ -3,19 +3,15 @@ sort.task <- c() # wektor z liczbami do posortowania, definiuje przestrzeń zada
 # generacja wszystkich posortowań możliwych do osiągnięcia
 # z dotychczasowo sprawdzonych poprzez zastosowanie jednej
 # zamiany kolejności elementów
-sort.neighbours <- function(XS){
+sort.neighbours <- function(V){
 	res<-list()
-	
-	for(i in 1:length(XS)){
-		x<-XS[[i]]
-		
+		x <- V
+  cost <- sort.cost(x)
 		for(j in 1:(length(x)-1)){
 			for(k in (j+1):length(x)){
-				res[[length(res)+1]] <- sort.swap(x,j,k)
+          res[[length(res)+1]] <- sort.swap(x,j,k)
 			}
 		}
-	}	
-  
   return(res)
 }
 
@@ -31,13 +27,11 @@ sort.swap <- function(x,i,j){
 
 
 # Implementacja funkcji kosztu dla zadania sortowania rosnącego
-# x - jest wektorem z przestrzeni przeszukiwań określającym kolejność liczb
-# Funkcja zwraca oszacowanie kosztu posortowania wektora z ustawieniem x, 
+# Funkcja zwraca oszacowanie kosztu posortowania wektora
 # 0 - oznacza, że wektor sort.task[x] jes posortowany rosnąco.
 sort.cost <- function(x){
-	s <- sort.task[x]
+  s <- x
 	len <- length(s)
-
 	q = 0
 	
 	for(i in 1:len){
@@ -47,6 +41,9 @@ sort.cost <- function(x){
 			}
 		}
 	}
-  
 	return(q)
+}
+
+sort.is_complete <- function(x){
+  return (sort.cost(x) == 0)
 }

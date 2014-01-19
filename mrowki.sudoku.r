@@ -54,25 +54,29 @@ mrowki.sudoku.build_sons <- function(ID) {
       if(board[i,j] == 0) {
         seq = sudoku.set_numb_seq(i,j,board)
         for(k in seq) {
-          newboard = sudoku.new_board(board,i,j,k)
-          newID = -1
-          for(m in 1:length(mrowki.vertices)) {
-            if(mrowki.check_boards(newboard,mrowki.vertices[[m]]$board)) {
-              newID = m
-              break
-            }
-          }
-          if(newID == -1) {
-            newID = mrowki.add_son(newboard)
-          }
-          
+          newboard <- sudoku.new_board(board,i,j,k)
+          newID <- mrowki.getID(newboard)
           mrowki.vertices[[ID]]$sons[[length(mrowki.vertices[[ID]]$sons)+1]] <<- newID
-          
         }
       }
     }
   }
   return(mrowki.vertices[[ID]]$sons)
+}
+
+mrowki.stop_criterion<-function(XS, M){
+  
+  path <- XS[[length(XS)]]
+  lastId <- path[[length(path)]]
+  vertex <- mrowki.vertices[[lastId]]
+  
+  if(sudoku.is_complete(vertex$board)){
+    mrowki.solution <<- vertex$board
+    return(TRUE)
+  } else{
+    return(FALSE)
+  }
+  
 }
 
 mrowki.sudoku <-function(ants = 1){
@@ -135,8 +139,16 @@ s[73:81] = c(9,7,8,5,3,1,0,0,0)
   
   sudoku.task <<- s
   mrowki.task <<- s
+  mrowki.trail <<- function(delta){
+    return (delta / 81)
+  }
+
+  mrowki.stop_ant <<- function(ID){
+    return (!mrowki.there_is_move(mrowki.get_sons(ID)))
+  }
+
   mrowki.build_sons <<- mrowki.sudoku.build_sons
-  mrowki.is_complete <<- sudoku.is_complete
+#  mrowki.is_complete <<- sudoku.is_complete
   
   
   return (mrowki.search())
