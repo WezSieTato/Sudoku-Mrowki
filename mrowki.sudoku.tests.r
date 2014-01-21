@@ -8,6 +8,10 @@ print('Rozwiazane sudoku')
 mrowki.sudoku.tests.fill_levels <- c()
 mrowki.sudoku.tests.max_fill <- 0
 
+mrowki.sudoku.tests.origin_stop_criterion <- function() {
+  stop("Brak implementacji funkcji mrowki.sudoku.tests.origin_stop_criterion!")
+}
+
 mrowki.sudoku.tests <-function(option,ants = 1){
   s = c()
   
@@ -80,13 +84,23 @@ mrowki.sudoku.tests <-function(option,ants = 1){
   
   sudoku.task <<- s
   mrowki.task <<- s
-  mrowki.op_generate <<- mrowki.sudoku.op_generate
-  mrowki.stop_criterion <<- mrowki.sudoku.tests.stop_criterion
   
-  mrowki.op_init<<-function(UG)
-  {
-    return (sudoku.task)
+  mrowki.stop_criterion <<- mrowki.sudoku.tests.stop_criterion
+  mrowki.trail <<- function(delta){
+    return (delta / 81)
   }
+  
+  mrowki.stop_ant <<- function(ID){
+    return (!mrowki.there_is_move(mrowki.get_sons(ID)))
+  }
+  
+  mrowki.first_vertex <<-function(){
+    return(list(board = mrowki.task, sons = NULL ))
+  }
+  
+  mrowki.build_sons <<- mrowki.sudoku.build_sons
+  #  mrowki.is_complete <<- sudoku.is_complete
+  
   
   return (mrowki.search())
 }
@@ -96,7 +110,7 @@ mrowki.sudoku.tests.stop_criterion <- function(XS,M) {
     mrowki.sudoku.tests.fill_levels[length(mrowki.sudoku.tests.fill_levels) + 1] <<- length(XS[[length(XS)]]) / mrowki.sudoku.tests.max_fill
   }
   
-  return(mrowki.sudoku.stop_criterion(XS,M))
+   return(mrowki.sudoku.tests.origin_stop_criterion(XS,M))
 }
   
 
@@ -114,10 +128,15 @@ mrowki.sudoku.tests.set_max_fill <- function(s) {
 }
 
 mrowki.sudoku.tests.test_1 <- function() {
+  
+  mrowki.sudoku.tests.origin_stop_criterion <<- mrowki.stop_criterion
+  
   mrowki.sudoku.tests(option=4)
   
   plot(1:length(mrowki.sudoku.tests.fill_levels),mrowki.sudoku.tests.fill_levels,type="l",col="blue",xlab="Iteracja",ylab="Wypelnienie",main="Wykres wypelnienia sudoku w zaleznosci od iteracji")
   
+  # czyszczenie po testach
+  mrowki.stop_criterion <<- mrowki.sudoku.tests.origin_stop_criterion
   mrowki.sudoku.tests.fill_levels <<- c()
   mrowki.sudoku.tests.iterations <<- -1
   #lines(x,y,col="red")
