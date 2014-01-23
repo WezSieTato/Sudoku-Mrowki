@@ -7,10 +7,9 @@ print('Rozwiazane sudoku')
 
 mrowki.sudoku.tests.fill_levels <- c()
 mrowki.sudoku.tests.max_fill <- 0
+mrowki.sudoku.tests.current_fill_max <- list()
 
-mrowki.sudoku.tests.origin_stop_criterion <- function() {
-  stop("Brak implementacji funkcji mrowki.sudoku.tests.origin_stop_criterion!")
-}
+mrowki.sudoku.tests.origin_stop_criterion <<- mrowki.stop_criterion
 
 mrowki.sudoku.tests <-function(option,ants = 1){
   s = c()
@@ -105,11 +104,13 @@ mrowki.sudoku.tests <-function(option,ants = 1){
   dim(s) = c(9,9)
   
   mrowki.sudoku.tests.max_fill <<- mrowki.sudoku.tests.set_max_fill(s)
+  mrowki.sudoku.tests.fill_levels <<- c()
+  mrowki.sudoku.tests.current_fill_max <<- mrowki.sudoku.set_current_fill_max(mrowki.antNumber)
   
   sudoku.task <<- s
   mrowki.task <<- s
   
-  mrowki.stop_criterion <<- mrowki.sudoku.tests.stop_criterion
+  
   mrowki.trail <<- function(delta){
     return (delta / 81)
   }
@@ -126,18 +127,35 @@ mrowki.sudoku.tests <-function(option,ants = 1){
   #  mrowki.is_complete <<- sudoku.is_complete
   
   
-  return (mrowki.search())
+  return (mrowki.sudoku.tests.search(mrowki.sudoku.tests.stop_criterion))
+}
+
+mrowki.sudoku.tests.search<-function(mrowki.sudoku.tests.stop_criterion){
+  search(mrowki.model_init, mrowki.model_update, mrowki.op_init, mrowki.op_select, mrowki.op_generate, mrowki.sudoku.tests.stop_criterion, UG )
+  
+  return(mrowki.solution)
 }
 
 mrowki.sudoku.tests.stop_criterion <- function(XS,M) {
-  if(length(XS) != 0) {
-    mrowki.sudoku.tests.fill_levels[length(mrowki.sudoku.tests.fill_levels) + 1] <<- length(XS[[length(XS)]]) / mrowki.sudoku.tests.max_fill
+  if(length(XS) != 1) {
+    index <- length(XS)%%(mrowki.antNumber)
+    if(index == 0) {
+      index <- mrowki.antNumber
+    }
+    mrowki.sudoku.tests.current_fill_max <<- max(mrowki.sudoku.tests.current_fill_max[[index]],length(XS[[length(XS)]]) / mrowki.sudoku.tests.max_fill)
+    mrowki.sudoku.tests.fill_levels[length(mrowki.sudoku.tests.fill_levels) + 1] <<- mrowki.sudoku.tests.current_fill_max
   }
   
    return(mrowki.sudoku.tests.origin_stop_criterion(XS,M))
 }
   
-
+mrowki.sudoku.set_current_fill_max <- function(numberOfAnts) {
+  temp <- list()
+  for(i in 1:numberOfAnts) {
+    temp[[i]] <- c(-1)
+  }
+  return(temp)
+}
 
 mrowki.sudoku.tests.set_max_fill <- function(s) {
   fill <- 1
@@ -151,22 +169,14 @@ mrowki.sudoku.tests.set_max_fill <- function(s) {
   return(fill)
 }
 
-mrowki.sudoku.tests.test_1 <- function() {
+mrowki.sudoku.tests.test_1 <- function(option=4) {
   
-  mrowki.sudoku.tests.origin_stop_criterion <<- mrowki.stop_criterion
   
-  mrowki.sudoku.tests(option=4)
   
-  mrowki.sudoku.tests.fill_levels <- mrowki.sudoku.tests.fill_levels[mrowki.sudoku.tests.fill_levels != mrowki.sudoku.tests.fill_levels[[1]]]
+  mrowki.sudoku.tests(option)
   
   plot(1:length(mrowki.sudoku.tests.fill_levels),mrowki.sudoku.tests.fill_levels,type="l",col="blue",xlab="Iteracja",ylab="Wypelnienie",main="Wykres wypelnienia sudoku w zaleznosci od iteracji")
   
-  # czyszczenie po testach
-  mrowki.stop_criterion <<- mrowki.sudoku.tests.origin_stop_criterion
-  mrowki.sudoku.tests.fill_levels <<- c()
-  mrowki.sudoku.tests.iterations <<- -1
-  #lines(x,y,col="red")
-  #legend("bottomleft", legend = c("1 mrowka","2 mrowki"), col = 1:2, lty = c(1,1))
 }
 
 mrowki.sudoku.tests.test_2 <- function(option=4) {
@@ -177,13 +187,11 @@ mrowki.sudoku.tests.test_2 <- function(option=4) {
   for(i in 1:15) {
     
     mrowki.sudoku.tests(option)
-    results[length(results)+1] = length(mrowki.sudoku.tests.fill_levels) - 1
-    mrowki.sudoku.tests.fill_levels <<- c()
+    results[length(results)+1] = length(mrowki.sudoku.tests.fill_levels)
   }
   
   plot(1:length(results),results,type="l",col="blue",xlab="Kolejne uruchomienia",ylab="Ilosc krokow",main="Wykres wykonanych ilosci krokow algorytmu w kolejnych uruchomieniach programu")
   
-  mrowki.stop_criterion <<- mrowki.sudoku.tests.origin_stop_criterion
 }
 
 mrowki.sudoku.tests.test_3 <- function(option=4,antnumber=2) {
@@ -192,21 +200,25 @@ mrowki.sudoku.tests.test_3 <- function(option=4,antnumber=2) {
   }
   
   # 
-  mrowki.antNumber <- antnumber
-  mrowki.sudoku.tests.origin_stop_criterion <<- mrowki.stop_criterion
+  mrowki.antNumber <<- antnumber
   #
   
   mrowki.sudoku.tests(option)
   
-  mrowki.sudoku.tests.fill_levels <- mrowki.sudoku.tests.fill_levels[mrowki.sudoku.tests.fill_levels != mrowki.sudoku.tests.fill_levels[[1]]]
   
   resultslist <- list()
   
   for(i in 1:antnumber) {
-    resultslist[[i]] <- c()
+    resultslist[[i]] <- list()
+    number <- 1
     for(j in 1:length(mrowki.sudoku.tests.fill_levels)) {
-      if((j%%antnumber) + i - 1) {
-        resultslist[[i]][length(resultslist[[i]])+1] <- mrowki.sudoku.tests.fill_levels[j]
+      if((j%%antnumber) == i%%antnumber ) {
+        #if(length(resultslist[[i]]) == 0) {
+        #  resultslist[[i]][i]
+        #  break
+        #}
+        resultslist[[i]][[number]] <- mrowki.sudoku.tests.fill_levels[j]
+        number <- number + 1
       }
     }
   }
@@ -228,8 +240,6 @@ mrowki.sudoku.tests.test_3 <- function(option=4,antnumber=2) {
   
   
   #
-  mrowki.stop_criterion <<- mrowki.sudoku.tests.origin_stop_criterion
-  mrowki.sudoku.tests.fill_levels <<- c()
   mrowki.antNumber <- 1
   #
 }
