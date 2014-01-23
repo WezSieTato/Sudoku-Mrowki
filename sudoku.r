@@ -74,3 +74,26 @@ sudoku.new_board <- function(board,raw,column,value) {
   board[raw,column] = value;
   return (board)
 }
+
+sudoku.board <- function(startBoard, path){
+  if(length(path) == 0){
+    return(startBoard)
+  }
+  for(i in 1 : length(path)){
+    vert <- path[[i]]
+    startBoard[vert[[1]], vert[[2]]] <- vert[[3]]
+  }
+  retur(startBoard)
+}
+
+sudoku.path <- function(startBoard, board){
+  path <- list()
+  board -= startBoard
+  for(i in 1:9){
+    for(k in 1:9){
+      if(board[i, k] != 0)
+      path[[length(path)]] <- c(i, k, board[i, k])
+    }
+  }
+  return(path)
+}
