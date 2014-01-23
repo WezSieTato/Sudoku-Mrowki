@@ -17,6 +17,7 @@ mrowki.sudoku.extend_state <- function(s) {
 }
 
 
+
 mrowki.sudoku.set_attractivity <- function(board,WA=4) {
   attr = array(data=0, dim = c(9,9)) 
   

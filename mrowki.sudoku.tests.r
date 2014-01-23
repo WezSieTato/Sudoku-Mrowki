@@ -64,7 +64,7 @@ mrowki.sudoku.tests <-function(option,ants = 1){
     s[73:81] = c(0,0,0,0,0,0,0,0,0)
   }
   if(option == 5) {
-  # pusta
+  # prawie wype³niona
     s[1:9] =   c(1,2,3,4,5,6,7,8,9)
     s[10:18] = c(4,5,0,7,8,0,1,2,3)
     s[19:27] = c(7,8,0,1,2,3,4,5,6)
@@ -74,6 +74,30 @@ mrowki.sudoku.tests <-function(option,ants = 1){
     s[55:63] = c(5,3,1,6,4,2,9,7,8)
     s[64:72] = c(0,0,0,0,0,0,0,0,0)
     s[73:81] = c(0,0,8,5,3,1,0,0,0)
+  }
+  if(option == 6) {
+    #prawie niewype³niona
+    s[1:9] =   c(0,5,0,0,0,6,8,0,0)
+    s[10:18] = c(0,0,3,0,8,1,7,0,0)
+    s[19:27] = c(0,0,7,4,3,0,0,1,0)
+    s[28:36] = c(7,0,0,0,0,4,1,5,8)
+    s[37:45] = c(3,0,0,0,7,0,0,0,2)
+    s[46:54] = c(2,1,5,9,0,0,0,0,7)
+    s[55:63] = c(0,7,0,0,4,9,3,0,0)
+    s[64:72] = c(0,0,9,8,5,0,2,0,0)
+    s[73:81] = c(0,0,8,2,0,0,0,9,0)
+  }
+  if(option == 7) {
+    #pusta
+    s[1:9] =   c(0,0,0,0,0,0,0,0,0)
+    s[10:18] = c(0,0,0,0,0,0,0,0,0)
+    s[19:27] = c(0,0,0,0,0,0,0,0,0)
+    s[28:36] = c(0,0,0,0,0,0,0,0,0)
+    s[37:45] = c(0,0,0,0,0,0,0,0,0)
+    s[46:54] = c(0,0,0,0,0,0,0,0,0)
+    s[55:63] = c(0,0,0,0,0,0,0,0,0)
+    s[64:72] = c(0,0,0,0,0,0,0,0,0)
+    s[73:81] = c(0,0,0,0,0,0,0,0,0)
   }
   if(is.null(s)) {
     stop("Podano bledny parametr option")
@@ -133,6 +157,8 @@ mrowki.sudoku.tests.test_1 <- function() {
   
   mrowki.sudoku.tests(option=4)
   
+  mrowki.sudoku.tests.fill_levels <- mrowki.sudoku.tests.fill_levels[mrowki.sudoku.tests.fill_levels != mrowki.sudoku.tests.fill_levels[[1]]]
+  
   plot(1:length(mrowki.sudoku.tests.fill_levels),mrowki.sudoku.tests.fill_levels,type="l",col="blue",xlab="Iteracja",ylab="Wypelnienie",main="Wykres wypelnienia sudoku w zaleznosci od iteracji")
   
   # czyszczenie po testach
@@ -142,3 +168,69 @@ mrowki.sudoku.tests.test_1 <- function() {
   #lines(x,y,col="red")
   #legend("bottomleft", legend = c("1 mrowka","2 mrowki"), col = 1:2, lty = c(1,1))
 }
+
+mrowki.sudoku.tests.test_2 <- function(option=4) {
+  
+  mrowki.sudoku.tests.origin_stop_criterion <<- mrowki.stop_criterion
+  results <- c()
+  
+  for(i in 1:15) {
+    
+    mrowki.sudoku.tests(option)
+    results[length(results)+1] = length(mrowki.sudoku.tests.fill_levels) - 1
+    mrowki.sudoku.tests.fill_levels <<- c()
+  }
+  
+  plot(1:length(results),results,type="l",col="blue",xlab="Kolejne uruchomienia",ylab="Ilosc krokow",main="Wykres wykonanych ilosci krokow algorytmu w kolejnych uruchomieniach programu")
+  
+  mrowki.stop_criterion <<- mrowki.sudoku.tests.origin_stop_criterion
+}
+
+mrowki.sudoku.tests.test_3 <- function(option=4,antnumber=2) {
+  if(antnumber > 4) {
+    stop("Testy nie przewiduja przypadku wiekszego niz 4 mrowki")
+  }
+  
+  # 
+  mrowki.antNumber <- antnumber
+  mrowki.sudoku.tests.origin_stop_criterion <<- mrowki.stop_criterion
+  #
+  
+  mrowki.sudoku.tests(option)
+  
+  mrowki.sudoku.tests.fill_levels <- mrowki.sudoku.tests.fill_levels[mrowki.sudoku.tests.fill_levels != mrowki.sudoku.tests.fill_levels[[1]]]
+  
+  resultslist <- list()
+  
+  for(i in 1:antnumber) {
+    resultslist[[i]] <- c()
+    for(j in 1:length(mrowki.sudoku.tests.fill_levels)) {
+      if((j%%antnumber) + i - 1) {
+        resultslist[[i]][length(resultslist[[i]])+1] <- mrowki.sudoku.tests.fill_levels[j]
+      }
+    }
+  }
+  
+  plot(1:(length(mrowki.sudoku.tests.fill_levels)/antnumber),resultslist[[1]],type="l",col="red",xlab="Iteracja",ylab="Wypelnienie",main="Wykres wypelnienia sudoku w zaleznosci od iteracji")
+  
+  for(i in 1:antnumber) {
+    if(i == 2) {
+      lines(1:(length(mrowki.sudoku.tests.fill_levels)/antnumber),resultslist[[i]],col="green")
+    }
+    if(i == 3) {
+      lines(1:(length(mrowki.sudoku.tests.fill_levels)/antnumber),resultslist[[i]],col="blue")
+    }
+    if(i == 4) {
+      lines(1:(length(mrowki.sudoku.tests.fill_levels)/antnumber),resultslist[[i]],col="yellow")
+    }
+    
+  }
+  
+  
+  #
+  mrowki.stop_criterion <<- mrowki.sudoku.tests.origin_stop_criterion
+  mrowki.sudoku.tests.fill_levels <<- c()
+  mrowki.antNumber <- 1
+  #
+}
+

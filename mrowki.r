@@ -138,14 +138,18 @@ mrowki.get_pheromons <- function(ID, sons, pheromons) {
     
   }
   ### ten blok umozliwia podlaczenie atrakcyjnosci
-  #  max = which.max(prob)
-  #  for(i in 1:length(prob)) {
-  #    prob[[1]] <- prob[[1]] / max
-  #  }
-  #  attr <- mrowki.sudoku.set_attractivity(mrowki.vertices[[ID]]$board)
-  #  for(i in 1:length(sons)) {
-  #    prob[[i]] <- prob[[i]] + mrowki.sudoku.get_attractivity(mrowki.vertices[[ID]]$board,mrowki.vertices[[sons[[i]]]]$board,attr)
-  #  }
+    max = which.max(prob)
+    for(i in 1:length(prob)) {
+      prob[[1]] <- prob[[1]] / max
+    }
+    attr <- mrowki.sudoku.set_attractivity(mrowki.vertices[[ID]]$board)
+    attr <- 20* attr
+    for(i in 1:length(sons)) {
+      prob[[i]] <- prob[[i]] + mrowki.sudoku.get_attractivity(mrowki.vertices[[ID]]$board,mrowki.vertices[[sons[[i]]]]$board,attr)
+    }
+    
+    # wsp <- table(mrowki.vertices[[ID]]$board)
+    
   ### /ten blok umozliwia podlaczenie atrakcyjnosci
   return(prob)
 }
