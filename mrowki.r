@@ -142,10 +142,12 @@ mrowki.get_pheromons <- function(ID, sons, pheromons) {
     for(i in 1:length(prob)) {
       prob[[1]] <- prob[[1]] / max
     }
-    attr <- mrowki.sudoku.set_attractivity(mrowki.vertices[[ID]]$board)
+    attr <- mrowki.sudoku.set_attractivity( sudoku.board(mrowki.task, mrowki.vertices[[ID]]$board) )
     attr <- 20* attr
+    thisBoard <- sudoku.board(mrowki.task, mrowki.vertices[[ID]]$board)
     for(i in 1:length(sons)) {
-      prob[[i]] <- prob[[i]] + mrowki.sudoku.get_attractivity(mrowki.vertices[[ID]]$board,mrowki.vertices[[sons[[i]]]]$board,attr)
+      sonBoard <- sudoku.board(mrowki.task, mrowki.vertices[[sons[[i]]]]$board)
+      prob[[i]] <- prob[[i]] + mrowki.sudoku.get_attractivity( thisBoard, sonBoard, attr)
     }
     
     # wsp <- table(mrowki.vertices[[ID]]$board)
@@ -187,7 +189,17 @@ mrowki.op_generate <- function(XS,M,UG, WA=4) {
 
 
 mrowki.check_boards<- function(f_board,s_board) {
-  return(all(f_board == s_board))
+  if(length(f_board) != length(s_board))
+    return(FALSE)
+  for(i in 1 : length(f_board)){
+    vertF <- f_board[[i]]
+    vertS <- s_board[[i]]
+    for(k in 1 : 3){
+      if (vertF[[k]] != vertS[[k]])
+        return(FALSE)
+    }
+  }
+  return(TRUE)
 }
 
 mrowki.getID <- function(board){

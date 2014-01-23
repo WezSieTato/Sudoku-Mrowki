@@ -49,14 +49,14 @@ mrowki.sudoku.get_attractivity <- function(boardFirst,boardSecond,attr) {
 mrowki.sudoku.build_sons <- function(ID) {
   mrowki.vertices[[ID]]$sons <<- list()
   
-  board = mrowki.vertices[[ID]]$board
+  board = sudoku.board(mrowki.task, mrowki.vertices[[ID]]$board )
   for(i in 1:9) {
     for(j in 1:9) {
       if(board[i,j] == 0) {
         seq = sudoku.set_numb_seq(i,j,board)
         for(k in seq) {
           newboard <- sudoku.new_board(board,i,j,k)
-          newID <- mrowki.getID(newboard)
+          newID <- mrowki.getID(sudoku.path(mrowki.task, newboard))
           mrowki.vertices[[ID]]$sons[[length(mrowki.vertices[[ID]]$sons)+1]] <<- newID
         }
       }
@@ -71,8 +71,11 @@ mrowki.stop_criterion<-function(XS, M){
   lastId <- path[[length(path)]]
   vertex <- mrowki.vertices[[lastId]]
   
-  if(sudoku.is_complete(vertex$board)){
-    mrowki.solution <<- vertex$board
+  if(length(vertex$board) == 0)
+    return(FALSE)
+  board <- sudoku.board(mrowki.task, vertex$board)
+  if(sudoku.is_complete(board)){
+    mrowki.solution <<- board
     return(TRUE)
   } else{
     return(FALSE)
@@ -127,15 +130,15 @@ mrowki.sudoku <-function(ants = 1){
 #  s[73:81] = c(0,0,0,0,0,0,0,0,0)
 
 # pusta
-s[1:9] =   c(1,2,3,4,5,6,7,8,9)
-s[10:18] = c(4,5,6,7,8,9,1,2,3)
-s[19:27] = c(7,8,9,1,2,3,4,5,6)
-s[28:36] = c(2,1,4,3,6,5,8,9,7)
-s[37:45] = c(3,6,5,8,9,7,2,1,4)
-s[46:54] = c(8,9,7,2,1,4,3,6,5)
-s[55:63] = c(5,3,1,6,0,2,0,0,0)
-s[64:72] = c(6,4,2,9,7,8,0,0,0)
-s[73:81] = c(9,7,8,5,3,1,0,0,0)
+s[1:9] =   c(1,2,0,4,5,6,0,0,9)
+s[10:18] = c(4,0,6,7,0,0,0,2,3)
+s[19:27] = c(7,0,0,1,2,0,4,5,6)
+s[28:36] = c(2,1,0,3,0,0,8,0,7)
+s[37:45] = c(3,6,5,0,9,0,2,1,4)
+s[46:54] = c(8,0,7,2,1,0,3,6,5)
+s[55:63] = c(5,3,0,6,0,0,0,0,0)
+s[64:72] = c(0,0,2,9,7,0,0,0,0)
+s[73:81] = c(9,7,8,5,3,0,0,0,0)
   dim(s) = c(9,9)
   
   sudoku.task <<- s
@@ -149,7 +152,8 @@ s[73:81] = c(9,7,8,5,3,1,0,0,0)
   }
 
   mrowki.first_vertex <<-function(){
-    return(list(board = mrowki.task, sons = NULL ))
+   # return(list(board = mrowki.task, sons = NULL ))
+    return(list(board = list(), sons = NULL))
   }
 
   mrowki.build_sons <<- mrowki.sudoku.build_sons
@@ -158,3 +162,8 @@ s[73:81] = c(9,7,8,5,3,1,0,0,0)
   
   return (mrowki.search())
 }
+
+print('Rozwiazujemy sudoku')
+mrowki.sudoku()
+print('Rozwiazane sudoku')
+print(mrowki.solution)

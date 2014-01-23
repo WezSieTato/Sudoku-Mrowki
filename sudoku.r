@@ -83,7 +83,7 @@ sudoku.board <- function(startBoard, path){
     vert <- path[[i]]
     startBoard[vert[[1]], vert[[2]]] <- vert[[3]]
   }
-  retur(startBoard)
+  return(startBoard)
 }
 
 sudoku.path <- function(startBoard, board){
@@ -92,7 +92,7 @@ sudoku.path <- function(startBoard, board){
   for(i in 1:9){
     for(k in 1:9){
       if(delta[i, k] != 0)
-      path[[length(path)]] <- c(i, k, delta[i, k])
+      path[[length(path) + 1]] <- c(i, k, delta[i, k])
     }
   }
   return(path)
