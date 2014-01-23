@@ -88,11 +88,11 @@ sudoku.board <- function(startBoard, path){
 
 sudoku.path <- function(startBoard, board){
   path <- list()
-  board -= startBoard
+  delta = board - startBoard
   for(i in 1:9){
     for(k in 1:9){
-      if(board[i, k] != 0)
-      path[[length(path)]] <- c(i, k, board[i, k])
+      if(delta[i, k] != 0)
+      path[[length(path)]] <- c(i, k, delta[i, k])
     }
   }
   return(path)
