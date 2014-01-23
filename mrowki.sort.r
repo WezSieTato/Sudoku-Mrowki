@@ -49,7 +49,7 @@ mrowki.sort <-function(ants = 1){
   return (mrowki.search())
 }
 
-print('Rozwiazujemy sudoku')
+print('Sortujemy')
 mrowki.sort()
-print('Rozwiazane sudoku')
+print('Posortowane')
 print(sort.task[mrowki.solution])

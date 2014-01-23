@@ -83,6 +83,20 @@ mrowki.stop_criterion<-function(XS, M){
   
 }
 
+mrowki.check_boards<- function(f_board,s_board) {
+  if(length(f_board) != length(s_board))
+    return(FALSE)
+  for(i in 1 : length(f_board)){
+    vertF <- f_board[[i]]
+    vertS <- s_board[[i]]
+    for(k in 1 : 3){
+      if (vertF[[k]] != vertS[[k]])
+        return(FALSE)
+    }
+  }
+  return(TRUE)
+}
+
 mrowki.sudoku <-function(ants = 1){
   s = c()
 # Z jednym  
