@@ -161,7 +161,7 @@ s[73:81] = c(9,7,8,5,3,0,0,0,0)
     return (delta / 81)
   }
 
-  mrowki.stop_ant <<- function(ID){
+  mrowki.stop_ant <<- function(ID, YS){
     return (!mrowki.there_is_move(mrowki.get_sons(ID)))
   }
 
@@ -177,7 +177,7 @@ s[73:81] = c(9,7,8,5,3,0,0,0,0)
   return (mrowki.search())
 }
 
-print('Rozwiazujemy sudoku')
-mrowki.sudoku()
-print('Rozwiazane sudoku')
-print(mrowki.solution)
+#print('Rozwiazujemy sudoku')
+#mrowki.sudoku()
+#print('Rozwiazane sudoku')
+#print(mrowki.solution)

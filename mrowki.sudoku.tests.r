@@ -1,8 +1,8 @@
 source('mrowki.sudoku.r')
 
-print('Rozwiazujemy sudoku')
+#print('Rozwiazujemy sudoku')
 # mrowki.sudoku()
-print('Rozwiazane sudoku')
+#print('Rozwiazane sudoku')
 # print(mrowki.solution)
 
 mrowki.sudoku.tests.fill_levels <- c()
@@ -63,7 +63,7 @@ mrowki.sudoku.tests <-function(option,ants = 1){
     s[73:81] = c(0,0,0,0,0,0,0,0,0)
   }
   if(option == 5) {
-  # prawie wype³niona
+  # prawie wype?niona
     s[1:9] =   c(1,2,3,4,5,6,7,8,9)
     s[10:18] = c(4,5,0,7,8,0,1,2,3)
     s[19:27] = c(7,8,0,1,2,3,4,5,6)
@@ -75,7 +75,7 @@ mrowki.sudoku.tests <-function(option,ants = 1){
     s[73:81] = c(0,0,8,5,3,1,0,0,0)
   }
   if(option == 6) {
-    #prawie niewype³niona
+    #prawie niewype?niona
     s[1:9] =   c(0,5,0,0,0,6,8,0,0)
     s[10:18] = c(0,0,3,0,8,1,7,0,0)
     s[19:27] = c(0,0,7,4,3,0,0,1,0)

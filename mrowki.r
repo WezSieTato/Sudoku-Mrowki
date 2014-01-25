@@ -9,9 +9,7 @@ mrowki.solution <- NULL
 
 mrowki.op_init<-function(UG)
 {
-  
-  s = list(1)
-  return(s)
+  return(list(1))
 }
 
 mrowki.first_vertex <- function(){
@@ -122,7 +120,7 @@ mrowki.add_son <- function(B) {
 }
 
 mrowki.update_state <- function(YS,e) {
-  YS[length(YS)+1] <- e
+  YS[[length(YS)+1]] <- e
   return(YS)
 }
 
@@ -166,23 +164,22 @@ mrowki.op_generate <- function(XS,M,UG, WA=4) {
   ID <- YS[[1]]
   
 #  while(mrowki.there_is_move(X)) {
-  while(!mrowki.stop_ant(ID)) {
-    
+  while(!mrowki.stop_ant(ID, YS)) {
     X <- mrowki.get_sons(ID)
+    XT <- X
     for(i in 1 : length(X)){
       if(is.element(X[[i]], YS))
-        YS <- YS[-which(YS == X[[i]])]
+        XT <- XT[-which(XT == X[[i]])]
     }
-    P <- mrowki.get_pheromons(ID,X,M$pheromons)
+    P <- mrowki.get_pheromons(ID,XT,M$pheromons)
     
-    ID <- mrowki.rand_move(X,P)
+    ID <- mrowki.rand_move(XT,P)
 #    while(is.element(ID, YS))
 #      ID <- mrowki.rand_move(X,P)
-    
+
     YS <- mrowki.update_state(YS,ID)
     
   }
-  
   return(YS)
 }
 
