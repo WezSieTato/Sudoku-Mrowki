@@ -165,7 +165,6 @@ s[73:81] = c(9,7,8,5,3,0,0,0,0)
     return (delta / 81)
   }
 
-  mrowki.stop_ant <<- function(ID){
   mrowki.stop_ant <<- function(ID, YS){
     return (!mrowki.there_is_move(mrowki.get_sons(ID)))
   }

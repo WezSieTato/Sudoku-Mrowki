@@ -179,16 +179,12 @@ mrowki.op_generate <- function(XS,M,UG, WA=4) {
   YS <- mrowki.op_init()
   mrowki.deep <<- 1
   ID <- YS[[1]]
-  
-#  while(mrowki.there_is_move(X)) {
-  while(!mrowki.stop_ant(ID)) {
     
   while(!mrowki.stop_ant(ID, YS)) {
     X <- mrowki.get_sons(ID)
     XT <- X
     for(i in 1 : length(X)){
       if(is.element(X[[i]], YS))
-        YS <- YS[-which(YS == X[[i]])]
         XT <- XT[-which(XT == X[[i]])]
     }
     P <- mrowki.get_pheromons(ID,X,M$pheromons)

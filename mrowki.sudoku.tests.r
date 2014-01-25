@@ -115,7 +115,7 @@ mrowki.sudoku.tests <-function(option,ants = 1){
     return (delta / 81)
   }
   
-  mrowki.stop_ant <<- function(ID){
+  mrowki.stop_ant <<- function(ID, YS){
     return (!mrowki.there_is_move(mrowki.get_sons(ID)))
   }
   
@@ -170,9 +170,6 @@ mrowki.sudoku.tests.set_max_fill <- function(s) {
 }
 
 mrowki.sudoku.tests.test_1 <- function(option=4) {
-  
-  
-  
   mrowki.sudoku.tests(option)
   
   plot(1:length(mrowki.sudoku.tests.fill_levels),mrowki.sudoku.tests.fill_levels,type="l",col="blue",xlab="Iteracja",ylab="Wypelnienie",main="Wykres wypelnienia sudoku w zaleznosci od iteracji")
@@ -240,7 +237,7 @@ mrowki.sudoku.tests.test_3 <- function(option=4,antnumber=2) {
   
   
   #
-  mrowki.antNumber <- 1
+  mrowki.antNumber <<- 1
   #
 }
 
