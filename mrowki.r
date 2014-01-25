@@ -7,6 +7,9 @@ mrowki.task <- NULL
 mrowki.vertices <- NULL
 mrowki.solution <- NULL
 
+mrowki.fathers <- NULL
+mrowki.deep <- 1
+
 mrowki.op_init<-function(UG)
 {
   
@@ -24,6 +27,7 @@ mrowki.model_init<-function(UG)
   M <- list(pheromons = list())
   mrowki.vertices <<- list(firstVertex)
   mrowki.solution <<- NULL
+  mrowki.fathers <<- list()
   print(mrowki.task)
   return(M)
 }
@@ -138,19 +142,19 @@ mrowki.get_pheromons <- function(ID, sons, pheromons) {
     
   }
   ### ten blok umozliwia podlaczenie atrakcyjnosci
-#    max = which.max(prob)
-#    for(i in 1:length(prob)) {
-#      prob[[1]] <- prob[[1]] / max
-#    }
-#    attr <- mrowki.sudoku.set_attractivity( sudoku.board(mrowki.task, mrowki.vertices[[ID]]$board) )
-#    attr <- 20* attr
-#    thisBoard <- sudoku.board(mrowki.task, mrowki.vertices[[ID]]$board)
-#    for(i in 1:length(sons)) {
-#      sonBoard <- sudoku.board(mrowki.task, mrowki.vertices[[sons[[i]]]]$board)
-#      prob[[i]] <- prob[[i]] + mrowki.sudoku.get_attractivity( thisBoard, sonBoard, attr)
-#    }
-    
-    # wsp <- table(mrowki.vertices[[ID]]$board)
+  #  max = which.max(prob)
+  #  for(i in 1:length(prob)) {
+  #    prob[[1]] <- prob[[1]] / max
+  #  }
+  #  attr <- mrowki.sudoku.set_attractivity( sudoku.board(mrowki.task, mrowki.vertices[[ID]]$board) )
+  #  attr <- 20* attr
+  #  thisBoard <- sudoku.board(mrowki.task, mrowki.vertices[[ID]]$board)
+  #  for(i in 1:length(sons)) {
+  #    sonBoard <- sudoku.board(mrowki.task, mrowki.vertices[[sons[[i]]]]$board)
+  #    prob[[i]] <- prob[[i]] + mrowki.sudoku.get_attractivity( thisBoard, sonBoard, attr)
+  #  }
+  #  
+  #  # wsp <- table(mrowki.vertices[[ID]]$board)
     
   ### /ten blok umozliwia podlaczenie atrakcyjnosci
   return(prob)
@@ -160,9 +164,18 @@ mrowki.stop_ant <- function(ID){
   stop('Brak implementacji')
 }
 
+mrowki.add_to_fathers <- function(ID,deep) {
+  
+  if(length(mrowki.fathers[[deep]]) == 0) {
+    mrowki.fathers[[deep]][[1]] <<- ID
+    return (TRUE)
+  }
+  mrowki.fathers[[deep]][[length(mrowki.fathers[[deep]])+1]] <<- ID
+}
+
 mrowki.op_generate <- function(XS,M,UG, WA=4) {
   YS <- mrowki.op_init()
-  
+  mrowki.deep <<- 1
   ID <- YS[[1]]
   
 #  while(mrowki.there_is_move(X)) {
@@ -174,12 +187,15 @@ mrowki.op_generate <- function(XS,M,UG, WA=4) {
         YS <- YS[-which(YS == X[[i]])]
     }
     P <- mrowki.get_pheromons(ID,X,M$pheromons)
-    
+  
     ID <- mrowki.rand_move(X,P)
+    
 #    while(is.element(ID, YS))
 #      ID <- mrowki.rand_move(X,P)
     
     YS <- mrowki.update_state(YS,ID)
+  
+    mrowki.deep <<- mrowki.deep + 1
     
   }
   
@@ -192,14 +208,52 @@ mrowki.check_boards<- function(f_board,s_board) {
   return(all(f_board == s_board))
 }
 
-mrowki.getID <- function(board){
+mrowki.is_son <- function(son,father) {
+  found <- FALSE
+  for(i in father) {
+    found <- FALSE
+    
+    for(j in son) {
+      if(i == j) {
+        found <- TRUE
+      }
+    }
+    
+    if(found == FALSE) {
+      return (FALSE)
+    }
+  }
+  
+  return (TRUE)
+}
+
+mrowki.getID <- function(board,deep){
   newID <- -1
-  for(m in 1:length(mrowki.vertices)) {
-    if(mrowki.check_boards(board,mrowki.vertices[[m]]$board)) {
-      newID = m
+  father <- -1
+  
+  if(length(mrowki.fathers) < mrowki.deep) {
+    mrowki.fathers[[mrowki.deep]] <<- list()
+    
+    newID = mrowki.add_son(board)
+    return(newID)
+  }
+ 
+  for(i in mrowki.fathers[[mrowki.deep]]) {
+    if(mrowki.is_son(board,mrowki.vertices[[i]]$board)) {
+      father <- i
       break
     }
   }
+  
+  if(father != -1) {
+    for(m in mrowki.vertices[[father]]$sons) {
+      if(mrowki.check_boards(board,mrowki.vertices[[m]]$board)) {
+        newID = m
+        break
+      }
+    }
+  }
+  
   if(newID == -1) {
     newID = mrowki.add_son(board)
   }

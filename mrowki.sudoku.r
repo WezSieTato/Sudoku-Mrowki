@@ -62,6 +62,10 @@ mrowki.sudoku.build_sons <- function(ID) {
       }
     }
   }
+  if(length(mrowki.vertices[[ID]]$sons) > 0) {
+    mrowki.add_to_fathers(ID,mrowki.deep)
+  }
+  
   return(mrowki.vertices[[ID]]$sons)
 }
 
@@ -177,7 +181,7 @@ s[73:81] = c(9,7,8,5,3,0,0,0,0)
   return (mrowki.search())
 }
 
-print('Rozwiazujemy sudoku')
-mrowki.sudoku()
-print('Rozwiazane sudoku')
-print(mrowki.solution)
+# print('Rozwiazujemy sudoku')
+# mrowki.sudoku()
+# print('Rozwiazane sudoku')
+# print(mrowki.solution)

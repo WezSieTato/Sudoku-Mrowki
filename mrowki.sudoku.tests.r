@@ -120,11 +120,11 @@ mrowki.sudoku.tests <-function(option,ants = 1){
   }
   
   mrowki.first_vertex <<-function(){
-    return(list(board = mrowki.task, sons = NULL ))
+    # return(list(board = mrowki.task, sons = NULL ))
+    return(list(board = list(), sons = NULL))
   }
   
   mrowki.build_sons <<- mrowki.sudoku.build_sons
-  #  mrowki.is_complete <<- sudoku.is_complete
   
   
   return (mrowki.sudoku.tests.search(mrowki.sudoku.tests.stop_criterion))
