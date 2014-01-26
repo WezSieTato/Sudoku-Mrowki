@@ -6,8 +6,8 @@ source('mrowki.sudoku.r')
 # print(mrowki.solution)
 
 mrowki.sudoku.tests.fill_levels <- c()
-mrowki.sudoku.tests.max_fill <- 0
-mrowki.sudoku.tests.current_fill_max <- list()
+mrowki.sudoku.tests.max_fill <- -1
+mrowki.sudoku.tests.current_fill_max <- -1
 
 mrowki.sudoku.tests.origin_stop_criterion <<- mrowki.stop_criterion
 
@@ -105,7 +105,7 @@ mrowki.sudoku.tests <-function(option,ants = 1){
   
   mrowki.sudoku.tests.max_fill <<- mrowki.sudoku.tests.set_max_fill(s)
   mrowki.sudoku.tests.fill_levels <<- c()
-  mrowki.sudoku.tests.current_fill_max <<- mrowki.sudoku.set_current_fill_max(mrowki.antNumber)
+  mrowki.sudoku.tests.current_fill_max <<- -1
   
   sudoku.task <<- s
   mrowki.task <<- s
@@ -138,25 +138,13 @@ mrowki.sudoku.tests.search<-function(mrowki.sudoku.tests.stop_criterion){
 
 mrowki.sudoku.tests.stop_criterion <- function(XS,M) {
   if(length(XS) != 1) {
-    index <- length(XS)%%(mrowki.antNumber)
-    if(index == 0) {
-      index <- mrowki.antNumber
-    }
-    mrowki.sudoku.tests.current_fill_max <<- max(mrowki.sudoku.tests.current_fill_max[[index]],length(XS[[length(XS)]]) / mrowki.sudoku.tests.max_fill)
+    mrowki.sudoku.tests.current_fill_max <<- max(mrowki.sudoku.tests.current_fill_max,length(XS[[length(XS)]]) / mrowki.sudoku.tests.max_fill)
     mrowki.sudoku.tests.fill_levels[length(mrowki.sudoku.tests.fill_levels) + 1] <<- mrowki.sudoku.tests.current_fill_max
   }
   
    return(mrowki.sudoku.tests.origin_stop_criterion(XS,M))
 }
   
-mrowki.sudoku.set_current_fill_max <- function(numberOfAnts) {
-  temp <- list()
-  for(i in 1:numberOfAnts) {
-    temp[[i]] <- c(-1)
-  }
-  return(temp)
-}
-
 mrowki.sudoku.tests.set_max_fill <- function(s) {
   fill <- 1
   for(i in 1:9) {
@@ -195,42 +183,43 @@ mrowki.sudoku.tests.test_3 <- function(option=4,antnumber=2) {
   if(antnumber > 4) {
     stop("Testy nie przewiduja przypadku wiekszego niz 4 mrowki")
   }
-  
-  # 
-  mrowki.antNumber <<- antnumber
-  #
-  
-  mrowki.sudoku.tests(option)
-  
-  
+
+   
   resultslist <- list()
   
   for(i in 1:antnumber) {
     resultslist[[i]] <- list()
-    number <- 1
-    for(j in 1:length(mrowki.sudoku.tests.fill_levels)) {
-      if((j%%antnumber) == i%%antnumber ) {
-        #if(length(resultslist[[i]]) == 0) {
-        #  resultslist[[i]][i]
-        #  break
-        #}
-        resultslist[[i]][[number]] <- mrowki.sudoku.tests.fill_levels[j]
-        number <- number + 1
-      }
+    mrowki.antNumber <<- i
+    mrowki.sudoku.tests(option)
+    
+    resultslist[[i]] <- mrowki.sudoku.tests.fill_levels
+  }
+  
+  maxLength <- -1
+  maxIndex <- -1
+  for(i in 1:length(resultslist)) {
+    if(length(resultslist[[i]]) > maxLength) {
+      maxLength <- length(resultslist[[i]])
+      maxIndex <- i
     }
   }
   
-  plot(1:(length(mrowki.sudoku.tests.fill_levels)/antnumber),resultslist[[1]],type="l",col="red",xlab="Iteracja",ylab="Wypelnienie",main="Wykres wypelnienia sudoku w zaleznosci od iteracji")
+  plot(1:length(resultslist[[maxIndex]]),resultslist[[maxIndex]],type="l",xlab="Iteracja",ylab="Wypelnienie",main="Wykres wypelnienia sudoku w zaleznosci od iteracji")
+  
+  
   
   for(i in 1:antnumber) {
-    if(i == 2) {
-      lines(1:(length(mrowki.sudoku.tests.fill_levels)/antnumber),resultslist[[i]],col="green")
+    if(i == 1 && i != maxIndex) {
+      lines(1:length(resultslist[[i]]),resultslist[[i]],col="red")
     }
-    if(i == 3) {
-      lines(1:(length(mrowki.sudoku.tests.fill_levels)/antnumber),resultslist[[i]],col="blue")
+    if(i == 2 && i != maxIndex) {
+      lines(1:length(resultslist[[i]]),resultslist[[i]],col="green")
     }
-    if(i == 4) {
-      lines(1:(length(mrowki.sudoku.tests.fill_levels)/antnumber),resultslist[[i]],col="yellow")
+    if(i == 3 && i != maxIndex) {
+      lines(1:length(resultslist[[i]]),resultslist[[i]],col="blue")
+    }
+    if(i == 4 && i != maxIndex) {
+      lines(1:length(resultslist[[i]]),resultslist[[i]],col="yellow")
     }
     
   }

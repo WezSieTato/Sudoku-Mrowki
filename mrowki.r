@@ -127,7 +127,6 @@ mrowki.add_son <- function(B) {
 }
 
 mrowki.update_state <- function(YS,e) {
-  YS[length(YS)+1] <- e
   YS[[length(YS)+1]] <- e
   return(YS)
 }
@@ -191,9 +190,6 @@ mrowki.op_generate <- function(XS,M,UG, WA=4) {
   
     ID <- mrowki.rand_move(X,P)
     
-    P <- mrowki.get_pheromons(ID,XT,M$pheromons)
-    
-    ID <- mrowki.rand_move(XT,P)
 #    while(is.element(ID, YS))
 #      ID <- mrowki.rand_move(X,P)
     
