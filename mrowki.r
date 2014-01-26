@@ -49,7 +49,7 @@ mrowki.op_select<-function(XS,M, UG)
 }
 
 mrowki.trail <- function(delta){
-  stop('Brak implementacji funkcji stopu')
+  stop('Brak implementacji funkcji trail')
 }
 
 mrowki.model_update<-function(XS,M)
@@ -76,6 +76,9 @@ mrowki.model_update<-function(XS,M)
     M$pheromons[[k]] <- M$pheromons[[k]] * mrowki.pheromonDegradation
     if(M$pheromons[[k]] < 0.05)
       M$pheromons[[k]] <- 0.05
+    
+    if(M$pheromons[[k]] > 1.0)
+      M$pheromons[[k]] <- 1.0
   }
   
   return(M)

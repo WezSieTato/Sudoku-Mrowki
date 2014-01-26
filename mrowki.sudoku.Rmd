@@ -1,0 +1,12 @@
+Algorytm mrówkowy w rozwiązywaniu sudoku
+========================================================
+```{r}
+source('mrowki.sudoku.tests.r')
+```
+Zastosowanie algorytmu mrówkowego do problemu rozwiązywania sudoku z różnymi parametrami algorytmu (ilość mrówek, początkowa wielkość feromonów, współczynnik degradacji feromonów) oraz różnej instancji problemu
+
+
+
+```{r fig.width=12, fig.height=6}
+mrowki.sudoku.tests.test_2(1)
+```
