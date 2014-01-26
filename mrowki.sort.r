@@ -22,21 +22,31 @@ mrowki.stop_criterion<-function(XS, M){
   lenght_path <- length(path)
   vertex <- mrowki.vertices[[path[[lenght_path]]]]
   mrowki.solution <<- vertex$board
-  return(sort.is_complete(vertex$board) && ((lenght_path - 1) <= length(mrowki.task)))
   return(sort.is_complete(vertex$board))
 }
 
-mrowki.sort <-function(ants = 1){
-  sort.task <<- c(2,-6,1,-2, 1, 0)
 mrowki.sort <-function(task){
   sort.task <<- task
   mrowki.task <<- sort.task
+  
   mrowki.trail <<- function(delta){
-    return (1 - (delta / length(mrowki.task)))
+    return (delta / length(mrowki.task) / 2)
   }
   
-  mrowki.stop_ant <<- function(ID){
-    return (sort.is_complete(mrowki.vertices[[ID]]$board))
+  mrowki.getID <<- function(board, d){
+    newID <- -1
+    for(m in 1:length(mrowki.vertices)) {
+      if(mrowki.check_boards(board,mrowki.vertices[[m]]$board)) {
+        newID = m
+        break
+      }
+    }
+    if(newID == -1) {
+      newID = mrowki.add_son(board)
+    }
+    return(newID)
+  }
+  
   mrowki.stop_ant <<- function(ID, YS){
     if(sort.is_complete(mrowki.vertices[[ID]]$board) || length(YS) >= length(mrowki.task))
       return(TRUE)
@@ -56,8 +66,3 @@ mrowki.sort <-function(task){
   
   return (mrowki.search())
 }
-
-print('Sortujemy')
-mrowki.sort()
-print('Posortowane')
-print(sort.task[mrowki.solution])
