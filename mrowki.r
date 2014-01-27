@@ -217,7 +217,7 @@ mrowki.is_son <- function(son,father) {
     found <- FALSE
     
     for(j in son) {
-      if(i == j) {
+      if(!is.element(FALSE,i==j)) {
         found <- TRUE
       }
     }
