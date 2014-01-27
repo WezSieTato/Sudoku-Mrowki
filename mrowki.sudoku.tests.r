@@ -145,7 +145,7 @@ mrowki.sudoku.tests.test_3 <- function(option=4,antnumber=2) {
   #
 }
 
-mrowki.sudoku.tests.test_main <- function(n=25,antnumber=2,degrad=0.81,start=0.5) {
+mrowki.sudoku.tests.test_main <- function(n=20,antnumber=2,degrad=0.81,start=0.5) {
   results <- list()
   
   
@@ -165,7 +165,7 @@ mrowki.sudoku.tests.test_main <- function(n=25,antnumber=2,degrad=0.81,start=0.5
     }
   }
   
-  plot(1:length(results[[maxIndex]]),results[[maxIndex]],type="l",col="blue",xlab="Kolejne uruchomienia",ylab="Ilosc krokow",ylim=c(0,1), xlim=c(1,length(results[[maxIndex]])),main="Wykres wykonanych ilosci krokow algorytmu w kolejnych uruchomieniach programu")
+  plot(1:length(results[[maxIndex]]),results[[maxIndex]],type="l",col="blue",xlab="Kolejne uruchomienia",ylab="Ilosc krokow",ylim=c(0.5,1), xlim=c(1,length(results[[maxIndex]])),main="Wykres wykonanych ilosci krokow algorytmu w kolejnych uruchomieniach programu")
   
   for(i in 1:15) {
     if(i != maxIndex) {
