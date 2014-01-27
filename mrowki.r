@@ -67,9 +67,6 @@ mrowki.model_update<-function(XS,M)
     value <- mrowki.trail(trail)
     for(j in 1 : (trail - 1)){
       string <- paste(path[[j]],"->",path[[j+1]])
-      if( is.null(mrowki.pheromons[[string]])){
-        mrowki.pheromons[[string]] <<- mrowki.startPheromon
-      }
       mrowki.pheromons[[string]] <<- mrowki.pheromons[[string]] + value
       write(mrowki.pheromons[[string]] )
     }
