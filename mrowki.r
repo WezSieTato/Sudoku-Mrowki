@@ -3,6 +3,7 @@ source('mht.r')
 mrowki.antNumber <- 1
 mrowki.pheromonDegradation <- 0.81
 mrowki.startPheromon <- 0.5
+mrowki.pheromons <- NULL
 mrowki.task <- NULL
 mrowki.vertices <- NULL
 mrowki.solution <- NULL
@@ -26,6 +27,7 @@ mrowki.model_init<-function(UG)
 {
   firstVertex <- mrowki.first_vertex() 
   M <- list(pheromons = list())
+  mrowki.pheromons <<- list()
   mrowki.vertices <<- list(firstVertex)
   mrowki.solution <<- NULL
   mrowki.fathers <<- list()
@@ -54,10 +56,10 @@ mrowki.trail <- function(delta){
 
 mrowki.model_update<-function(XS,M)
 {
+  
   if(length(XS) == 0){
     return(M)
   }
-  
   #######
   for(i in 1 : length(XS)){
     path <- XS[[i]]
@@ -65,20 +67,21 @@ mrowki.model_update<-function(XS,M)
     value <- mrowki.trail(trail)
     for(j in 1 : (trail - 1)){
       string <- paste(path[[j]],"->",path[[j+1]])
-      if( is.null(M$pheromons[[string]])){
-        M$pheromons[[string]] <- mrowki.startPheromon
+      if( is.null(mrowki.pheromons[[string]])){
+        mrowki.pheromons[[string]] <<- mrowki.startPheromon
       }
-      M$pheromons[[string]] <- M$pheromons[[string]] + value
+      mrowki.pheromons[[string]] <<- mrowki.pheromons[[string]] + value
+      write(mrowki.pheromons[[string]] )
     }
   }
   
-  for(k in 1 : length(M$pheromons)){
-    M$pheromons[[k]] <- M$pheromons[[k]] * mrowki.pheromonDegradation
-    if(M$pheromons[[k]] < 0.05)
-      M$pheromons[[k]] <- 0.05
+  for(k in 1 : length(mrowki.pheromons)){
+    mrowki.pheromons[[k]] <<- mrowki.pheromons[[k]] * mrowki.pheromonDegradation
+    if(mrowki.pheromons[[k]] < 0.05)
+      mrowki.pheromons[[k]] <<- 0.05
     
-    if(M$pheromons[[k]] > 1.0)
-      M$pheromons[[k]] <- 1.0
+    if(mrowki.pheromons[[k]] > 1.0)
+      mrowki.pheromons[[k]] <<- 1.0
   }
   
   return(M)
@@ -189,7 +192,7 @@ mrowki.op_generate <- function(XS,M,UG, WA=4) {
       if(is.element(X[[i]], YS))
         XT <- XT[-which(XT == X[[i]])]
     }
-    P <- mrowki.get_pheromons(ID,X,M$pheromons)
+    P <- mrowki.get_pheromons(ID,X,mrowki.pheromons)
   
     ID <- mrowki.rand_move(X,P)
     

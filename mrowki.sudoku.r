@@ -57,6 +57,12 @@ mrowki.sudoku.build_sons <- function(ID) {
         for(k in seq) {
           newboard <- sudoku.new_board(board,i,j,k)
           newID <- mrowki.getID(sudoku.path(mrowki.task, newboard))
+          
+          string <- paste(ID,"->",newID)
+         # print(string)
+          if(is.null( mrowki.pheromons[[string]]))
+             mrowki.pheromons[[string]] <<- mrowki.startPheromon
+          
           mrowki.vertices[[ID]]$sons[[length(mrowki.vertices[[ID]]$sons)+1]] <<- newID
         }
       }
