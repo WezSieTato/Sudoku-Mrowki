@@ -100,7 +100,7 @@ mrowki.sudoku.tests.test_main <- function(n=20,antnumber=2,degrad=0.81,start=0.5
     }
   }
   
-  plot(1:length(results[[maxIndex]]),results[[maxIndex]],type="l",col="blue",xlab="Numer uruchomienia",ylab="Funkcja celu (wypełnienie sudoku)",ylim=c(0.5,1), xlim=c(1,length(results[[maxIndex]])),main="Wykres wykonanych ilosci krokow algorytmu w kolejnych uruchomieniach programu")
+  plot(1:length(results[[maxIndex]]),results[[maxIndex]],type="l",col="blue",xlab="Numer iteracji",ylab="Funkcja celu (wypelnienie sudoku)",ylim=c(0.5,1), xlim=c(1,length(results[[maxIndex]])),main="Funkcja celow w kolejnych krokach algorytmu")
   
   for(i in 1:15) {
     if(i != maxIndex) {
