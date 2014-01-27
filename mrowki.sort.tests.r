@@ -12,4 +12,4 @@ mrowki.sort.test <- function(problem_size, ant_number, pheromon_degradation, sta
   
 }
 
-mrowki.sort.test(10, 1, 0.8, 0.5)
+mrowki.sort.test(10, 10, 0.9, 0.5)
