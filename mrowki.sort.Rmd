@@ -1,0 +1,13 @@
+Algorytm mrówkowy w sortowanie tablicy
+========================================================
+```{r}
+source('mrowki.sort.tests.r')
+```
+Zastosowanie algorytmu mrówkowego do problemu sortowania tablicy z różnymi parametrami algorytmu (ilość mrówek, początkowa wielkość feromonów, współczynnik degradacji feromonów) oraz różnej instancji problemu
+
+
+```{r}
+mrowki.sort.test(5, 1, 0.3, 0.6)
+```
+
+
