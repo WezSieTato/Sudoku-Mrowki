@@ -78,9 +78,9 @@ mrowki.sudoku.tests <-function(s,ants = 1,degrad=0.81,start=0.5){
 mrowki.sudoku.tests.test_main <- function(n=20,antnumber=2,degrad=0.81,start=0.5) {
   results <- list()
   
+  ilosc_powtorzen <- 10
   
-  
-  for(i in 1:15) {
+  for(i in 1: ilosc_powtorzen) {
     print('Sudoku do rozwiazania:')
     mrowki.sudoku.tests(mrowki.sudoku.tests.generate_option(n),antnumber,degrad,start)
     print("Rozwiazanie:")
@@ -102,7 +102,7 @@ mrowki.sudoku.tests.test_main <- function(n=20,antnumber=2,degrad=0.81,start=0.5
   
   plot(1:length(results[[maxIndex]]),results[[maxIndex]],type="l",col="blue",xlab="Numer iteracji",ylab="Funkcja celu (wypelnienie sudoku)",ylim=c(0.5,1), xlim=c(1,length(results[[maxIndex]])),main="Funkcja celow w kolejnych krokach algorytmu")
   
-  for(i in 1:15) {
+  for(i in 1: ilosc_powtorzen) {
     if(i != maxIndex) {
       lines(1:length(results[[i]]),results[[i]],col=sample(colours(),1))
     }
