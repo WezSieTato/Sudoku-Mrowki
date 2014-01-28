@@ -10,6 +10,7 @@ mrowki.solution <- NULL
 
 mrowki.fathers <- NULL
 mrowki.deep <- 1
+mrowki.use_atractivity <- FALSE
 
 mrowki.op_init<-function(UG)
 {
@@ -135,16 +136,12 @@ mrowki.update_state <- function(YS,e) {
 }
 
 mrowki.get_pheromons <- function(ID, sons, pheromons) {
-  prob = list()
+  prob = c()
   for(i in 1:length(sons)) {
-    if(is.null(pheromons[[paste(ID,"->",sons[[i]])]])) {
-      prob[[i]] = mrowki.startPheromon
-    } else {
       prob[[i]] = pheromons[[paste(ID,"->",sons[[i]])]]
     }
     
-    
-  }
+
   ### ten blok umozliwia podlaczenie atrakcyjnosci
   #  max = which.max(prob)
   #  for(i in 1:length(prob)) {
@@ -177,6 +174,10 @@ mrowki.add_to_fathers <- function(ID,deep) {
   mrowki.fathers[[deep]][[length(mrowki.fathers[[deep]])+1]] <<- ID
 }
 
+mrowki.check <- function(ID, X){
+  return(ID)
+}
+
 mrowki.op_generate <- function(XS,M,UG, WA=4) {
   YS <- mrowki.op_init()
   mrowki.deep <<- 1
@@ -190,8 +191,13 @@ mrowki.op_generate <- function(XS,M,UG, WA=4) {
         XT <- XT[-which(XT == X[[i]])]
     }
     P <- mrowki.get_pheromons(ID,X,mrowki.pheromons)
+    
+    if(mrowki.use_atractivity){
+      P <- mrowki.add_atractivity(P, X)
+    }
   
     ID <- mrowki.rand_move(X,P)
+    ID <- mrowki.check(ID, X)
     
 #    while(is.element(ID, YS))
 #      ID <- mrowki.rand_move(X,P)
@@ -208,7 +214,11 @@ mrowki.op_generate <- function(XS,M,UG, WA=4) {
 
 
 mrowki.check_boards<- function(f_board,s_board) {
-  return(all(f_board == s_board))
+  for( i in 1 : length(s_board)){
+    if(f_board[[i]] != s_board[[i]])
+      return(FALSE)
+  }
+  return(TRUE)
 }
 
 mrowki.is_son <- function(son,father) {

@@ -31,10 +31,47 @@ mrowki.stop_criterion<-function(XS, M){
   return(sort.is_complete(vertex$board))
 }
 
+mrowki.check <- function(ID, X){
+
+  for(ver in X){
+    if(sort.cost(mrowki.vertices[[ver]]$board) == 0){
+      return(ver)
+    }
+  }
+  return(ID)
+}
+
+
+mrowki.add_atractivity <- function(P, X){
+  ### ten blok umozliwia podlaczenie atrakcyjnosci
+    max = max(P)
+    costs <- c()
+    for(i in 1:length(P)) {
+      P[[i]] <- P[[i]] / max
+      costs[[i]] <- sort.cost( mrowki.vertices[[X[[i]]]]$board)
+    }
+    
+   # print(costs)
+    
+    maxA <- max(costs)
+    att <- c()
+    for(j in 1 : length(costs)){
+      att[[j]] <- maxA
+    }
+    att <- att - costs
+    att <- att / maxA
+ #   att <- att 
+  #  print(att)
+    P <- P + att
+    #print(P)
+    
+    return(P)
+}
+
 mrowki.sort <-function(task){
   sort.task <<- task
   mrowki.task <<- sort.task
-  
+  mrowki.use_atractivity <<- TRUE
   mrowki.trail <<- function(delta){
     return (delta / length(mrowki.task) / 2)
   }

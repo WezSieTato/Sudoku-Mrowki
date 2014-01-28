@@ -10,6 +10,14 @@ mrowki.sort.test <- function(problem_size, ant_number, pheromon_degradation, sta
   print('==============')
   print(mrowki.task[mrowki.solution])
   
+  costs <- c()
+  
+  for(i in mrowki.vertices){
+    costs[[length(costs)+1]] <- sort.cost(i$board)
+  }
+  
+  plot(costs)
+  
 }
 
-mrowki.sort.test(5, 10, 0.9, 0.5)
+mrowki.sort.test(10, 2, 0.9, 0.5)
